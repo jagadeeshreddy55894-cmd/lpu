@@ -2,161 +2,156 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mess Pass — Accepted</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mess Pass — Adjusted Spacing & Tall Box</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
   :root{
-    --bg:#f5f6f8;
+    --bg:#f4f5f6;
     --card:#ffffff;
-    --accent-dark:#126016;   /* outer green */
-    --accent-deep:#0D5F0F;   /* darker stroke */
-    --accent-lime:#10ef2d;   /* bright green */
     --muted:#e6e6e6;
     --text:#222;
+    --accent-lime:#10ef2d;
+    --dark-green:#13521a;
+    --light-frame:rgba(205,232,198,0.95);
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;padding:0;background:var(--bg);font-family:'Poppins',sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
 
-  /* TOP BAR */
-  .top-modal{
-    position:fixed;
-    top:0;left:0;width:100%;
-    background:#3c3c3c;
-    padding:10px 0 6px;
-    color:#fff;
-    text-align:center;
-    z-index:100;
-    font-size:16px;
-    font-weight:600;
-    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  /* Top bar */
+  .top-bar{
+    position:fixed;left:0;right:0;top:0;height:58px;background:#3b3b3b;color:#fff;display:flex;align-items:center;justify-content:center;
+    z-index:50;padding-top:6px;box-shadow:0 2px 6px rgba(0,0,0,0.15);
   }
-  .drag-bar{
-    width:60px;height:6px;background:#ffffffcc;border-radius:3px;margin:0 auto 6px;
-  }
+  .drag-handle{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:56px;height:6px;border-radius:6px;background:rgba(255,255,255,0.85)}
+  .top-bar .title{font-weight:600;font-size:18px}
+  .top-bar .close{position:absolute;right:16px;top:14px;color:#fff;font-size:22px;opacity:0.9}
 
-  .page{padding-top:60px;display:flex;justify-content:center;padding-bottom:36px}
+  .page{padding-top:76px;display:flex;justify-content:center;padding-bottom:40px}
 
-  /* CARD */
-  .container{
-    width:100%;max-width:420px;background:var(--card);border-radius:18px;padding:18px 20px 24px;position:relative;box-shadow:0 12px 30px rgba(0,0,0,0.10);
+  /* Card container */
+  .card{
+    width:100%;max-width:380px;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 28px rgba(0,0,0,0.12);border:1px solid rgba(0,0,0,0.04);position:relative;
   }
 
-  /* COUNT CIRCLE: light gray background, dark digits */
-  .count-circle{
-    position:absolute;right:14px;top:12px;background:var(--muted);min-width:42px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#555;font-size:16px;padding:0 8px;
-  }
+  /* countdown */
+  .count-circle{position:absolute;right:14px;top:14px;width:42px;height:36px;border-radius:12px;background:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:800;color:#555;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,0.12)}
 
-  .header{display:flex;gap:14px;align-items:center}
-  .photo{width:86px;height:86px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.08)}
-  .meal-type{font-size:30px;font-weight:900}
+  .row{display:flex;gap:14px;align-items:flex-start}
+  .photo{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.09);box-shadow:0 6px 20px rgba(0,0,0,0.12)}
+  .info{flex:1}
+  .meal-type{font-size:32px;font-weight:800;margin-top:2px}
   .user-id{font-weight:800;margin-top:6px}
-  .user-name{font-weight:600;margin-top:6px}
-  .mess-center{font-weight:600;margin-top:4px;color:var(--text)}
+  .user-name{margin-top:6px;font-weight:600}
+  .mess-center{margin-top:4px;font-weight:600;color:var(--text)}
 
-  .program-info{margin:18px 0 14px;color:#4b2c2180;font-weight:600}
+  /* PROGRAM -> add larger vertical gap below this (not cramped) */
+  .program{color:#6b564a88;margin-top:14px;margin-bottom:26px;font-weight:600;line-height:1.45}
 
-  /* date/time with smaller gap */
-  .date-time{display:flex;justify-content:space-between;margin-bottom:10px;font-size:16px;font-weight:700}
+  /* date/time: keep clear separation, and we want a bigger gap to Meal Approved */
+  .date-time{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-weight:700;font-size:17px}
 
-  .meal-approved{text-align:center;font-size:26px;font-weight:800;color:#30b520;margin-bottom:12px}
+  /* added extra gap between date/time and meal approved */
+  .meal-approved{ text-align:center;color:var(--accent-lime);font-weight:800;font-size:26px;margin-bottom:20px;text-shadow:0 3px 0 rgba(16,111,20,0.06) }
 
-  /* OUTER GREEN HORIZONTAL STRIP (long & short height) */
-  .accepted-area{
+  /* OUTER GREEN BOX — now TALL vertical box (not sleeping) */
+  .accepted-strip{
     width:100%;
-    background:var(--accent-dark);
-    border-radius:16px;
-    padding:14px 0;
-    height:170px;               /* horizontal strip height (adjust if needed) */
+    background:var(--dark-green);
+    border-radius:12px;
+    padding:22px 12px;   /* generous vertical padding */
     display:flex;
     justify-content:center;
     align-items:center;
+    margin-top:6px;
   }
 
-  /* INNER WHITE CARD (with thick light border like reference) */
-  .accepted-card{
+  /* INNER WHITE FRAME — taller vertical rectangle */
+  .accepted-frame{
     width:92%;
-    max-width:760px;            /* can be wide on desktop; on small screens will shrink */
-    height:110px;               /* shallow horizontal card */
-    background:#ffffff;
-    border-radius:14px;
-    padding:10px 18px;
+    max-width:720px;
+    background:#fff;
+    border-radius:12px;
+    padding:18px;
     display:flex;
     justify-content:center;
     align-items:center;
-    border:12px solid rgba(205,232,198,0.9); /* light green-ish outer border */
-    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    border:14px solid var(--light-frame); /* light green frame */
+    box-shadow:0 8px 22px rgba(0,0,0,0.12) inset;
+    min-height:320px;   /* TALL inner area to match screenshot */
   }
 
-  /* SVG ACCEPTED pill fills inner card horizontally */
-  .accepted-graphic{width:100%;height:100%}
-  .accepted-graphic svg{width:100%;height:100%;display:block}
+  /* place the accepted pill centered horizontally and vertically inside the tall white frame */
+  .accepted-pill{width:88%;max-width:640px;height:120px;display:flex;align-items:center;justify-content:center}
+  .accepted-pill svg{width:100%;height:100%;display:block}
 
-  /* responsive small screens */
+  /* small screens adjust */
   @media (max-width:420px){
-    .container{padding:14px 14px 20px}
-    .accepted-area{height:150px}
-    .accepted-card{height:96px;padding:8px}
-    .meal-type{font-size:26px}
-    .count-circle{top:10px;right:12px}
+    .card{padding:14px}
+    .program{margin-bottom:20px}
+    .date-time{margin-bottom:14px}
+    .meal-approved{margin-bottom:14px}
+    .accepted-frame{min-height:240px;padding:12px}
+    .accepted-pill{height:96px}
+    .meal-type{font-size:28px}
   }
 </style>
 </head>
 <body>
+  <div class="top-bar" role="banner">
+    <div class="drag-handle" aria-hidden="true"></div>
+    <div class="title">Mess Pass</div>
+    <div class="close" aria-hidden="true">✕</div>
+  </div>
 
-<!-- Top modal header -->
-<div class="top-modal">
-  <div class="drag-bar" aria-hidden="true"></div>
-  Mess Pass
-</div>
+  <div class="page">
+    <main class="card" role="main" aria-label="Mess Pass Card">
+      <div class="count-circle" id="countCircle">30</div>
 
-<div class="page">
-  <div class="container" role="region" aria-label="Mess Pass Card">
-    <div class="count-circle" id="countCircle" aria-live="polite">30</div>
+      <div class="row">
+        <img class="photo" alt="Cheruku Sai Kumar" src="https://i.postimg.cc/3NnwdHd3/cherukusai.jpg"
+             onerror="this.onerror=null;this.src='https://i.imgur.com/0KXQm7T.png'">
 
-    <div class="header">
-      <img src="https://i.postimg.cc/3NnwdHd3/cherukusai.jpg" alt="User photo" class="photo" onerror="this.onerror=null;this.src='https://i.imgur.com/0KXQm7T.png'">
-      <div>
-        <div class="meal-type" id="mealType">Lunch</div>
-        <div class="user-id" id="userId">12311129</div>
-        <div class="user-name" id="userName">Cheruku Sai Kumar</div>
-        <div class="mess-center" id="messCenter">Mess-Centre-02</div>
-      </div>
-    </div>
-
-    <div class="program-info">P132:B.Tech. (Computer Science and Engineering)(2023)</div>
-
-    <div class="date-time" aria-label="date and time">
-      <div id="dateDisplay">--</div>
-      <div id="timeDisplay">--</div>
-    </div>
-
-    <div class="meal-approved" id="mealApprovedText">Meal Approved</div>
-
-    <!-- ACCEPTED area: wide horizontal green strip with white inner card -->
-    <div class="accepted-area" role="img" aria-label="Accepted area">
-      <div class="accepted-card" aria-hidden="false">
-        <div class="accepted-graphic" aria-hidden="true">
-          <!-- EXACT horizontal accepted pill SVG (matches provided reference) -->
-          <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Accepted badge">
-            <!-- Outer long white rounded pill inside the white card (with dark green stroke) -->
-            <rect x="20" y="40" rx="80" ry="80" width="860" height="140" fill="#ffffff" stroke="var(--accent-deep)" stroke-width="12"/>
-            <!-- Small bright green circle with dark stroke -->
-            <circle cx="200" cy="110" r="45" fill="var(--accent-lime)" stroke="var(--accent-deep)" stroke-width="8"/>
-            <!-- White check -->
-            <path d="M175 110 l25 25 l40 -45" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- ACCEPTED text in bright green -->
-            <text x="300" y="125" font-family="Poppins, Arial, sans-serif" font-size="70" font-weight="800" fill="var(--accent-lime)">ACCEPTED</text>
-            <!-- subtle inner light border for depth -->
-            <rect x="40" y="58" rx="68" ry="68" width="820" height="84" fill="none" stroke="#e6f7ea" stroke-width="8"/>
-          </svg>
+        <div class="info">
+          <div class="meal-type" id="mealType">Lunch</div>
+          <div class="user-id" id="userId">12311129</div>
+          <div class="user-name" id="userName">Cheruku Sai Kumar</div>
+          <div class="mess-center" id="messCenter">Mess-Centre-02</div>
         </div>
       </div>
-    </div>
 
+      <div class="program" id="programName">P132:B.Tech. (Computer Science and Engineering)(2023)</div>
+
+      <div class="date-time" aria-label="Date and time">
+        <div id="dateDisplay">--</div>
+        <div id="timeDisplay">--</div>
+      </div>
+
+      <div class="meal-approved" id="mealApprovedText">Meal Approved</div>
+
+      <!-- TALL green outer strip -->
+      <div class="accepted-strip" role="region" aria-label="Accepted area">
+        <div class="accepted-frame" role="img" aria-label="Accepted frame">
+          <!-- center the accepted pill -->
+          <div class="accepted-pill" aria-hidden="true">
+            <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Accepted">
+              <!-- long pill shape (kept horizontal) -->
+              <rect x="40" y="50" rx="80" width="820" height="120" fill="#fff" stroke="#0b6f2b" stroke-width="10"/>
+              <!-- left small circle -->
+              <circle cx="170" cy="110" r="44" fill="#10ef2d" stroke="#0b6f2b" stroke-width="8"/>
+              <!-- check mark -->
+              <path d="M150 110 l22 22 l36 -40" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <!-- ACCEPTED text -->
+              <text x="250" y="135" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="68" fill="#10ef2d">ACCEPTED</text>
+              <!-- inner light border -->
+              <rect x="70" y="70" rx="64" width="760" height="80" fill="none" stroke="#e6f7ea" stroke-width="8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </main>
   </div>
-</div>
 
 <script>
   // Elements
@@ -165,7 +160,7 @@
   const timeDisplay = document.getElementById('timeDisplay');
   const mealApprovedText = document.getElementById('mealApprovedText');
 
-  // Update date/time
+  // Date/time
   function updateDateTime(){
     const now = new Date();
     const options = { year:'numeric', month:'short', day:'2-digit' };
@@ -179,7 +174,7 @@
   updateDateTime();
   setInterval(updateDateTime, 1000);
 
-  // Countdown (30s)
+  // Countdown
   let countdown = 30;
   let interval = null;
   function renderCount(){ countCircle.textContent = String(countdown); }
@@ -192,18 +187,15 @@
       if(countdown <= 0){
         clearInterval(interval);
         countCircle.textContent = '0';
-        // visually mark expired
         countCircle.style.color = '#c62828';
         mealApprovedText.textContent = 'Expired';
         mealApprovedText.style.color = '#b00020';
-      } else {
-        renderCount();
-      }
-    }, 1000);
+      } else renderCount();
+    },1000);
   }
   startCountdown();
 
-  // Optional: press 'r' to reset during testing
+  // quick reset by pressing 'r'
   window.addEventListener('keydown', e => { if(e.key === 'r') startCountdown(); });
 </script>
 </body>
