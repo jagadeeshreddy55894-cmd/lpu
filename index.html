@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Mess Pass — Adjusted Spacing & Tall Box</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#3b3b3b">
+<!-- Prevent zooming on mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Mess Pass — No Zoom + Correct Alignment</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -18,7 +17,7 @@
     --light-frame:rgba(205,232,198,0.95);
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;touch-action:manipulation}
 
   /* Top bar */
   .top-bar{
@@ -34,34 +33,44 @@
   /* Card container */
   .card{
     width:100%;max-width:380px;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 28px rgba(0,0,0,0.12);border:1px solid rgba(0,0,0,0.04);position:relative;
+    -webkit-user-select: none; user-select: none;
   }
 
   /* countdown */
-  .count-circle{position:absolute;right:14px;top:14px;width:42px;height:36px;border-radius:12px;background:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:800;color:#555;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,0.12)}
+  .count-circle{
+    position:absolute;right:14px;top:10px;width:42px;height:36px;border-radius:12px;background:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:800;color:#555;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,0.12);
+  }
 
+  /* Header layout:
+     align-items:flex-start keeps photo top aligned.
+     We'll shift the meal-type down so it starts below the timer.
+  */
   .row{display:flex;gap:14px;align-items:flex-start}
   .photo{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.09);box-shadow:0 6px 20px rgba(0,0,0,0.12)}
   .info{flex:1}
-  .meal-type{font-size:32px;font-weight:800;margin-top:2px}
-  .user-id{font-weight:800;margin-top:6px}
+  .meal-type{
+    font-size:32px;font-weight:800;
+    /* shift down so it begins a little below the timer circle */
+    margin-top:12px; /* <-- key: moves 'Lunch' downward */
+  }
+  .user-id{font-weight:800;margin-top:8px}
   .user-name{margin-top:6px;font-weight:600}
   .mess-center{margin-top:4px;font-weight:600;color:var(--text)}
 
-  /* PROGRAM -> add larger vertical gap below this (not cramped) */
-  .program{color:#6b564a88;margin-top:14px;margin-bottom:26px;font-weight:600;line-height:1.45}
+  /* PROGRAM -> larger vertical gap below this (not cramped) */
+  .program{color:#6b564a88;margin-top:14px;margin-bottom:28px;font-weight:600;line-height:1.45}
 
-  /* date/time: keep clear separation, and we want a bigger gap to Meal Approved */
-  .date-time{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-weight:700;font-size:17px}
+  /* date/time: keep clear separation, and bigger gap to Meal Approved */
+  .date-time{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;font-weight:700;font-size:17px}
 
-  /* added extra gap between date/time and meal approved */
-  .meal-approved{ text-align:center;color:var(--accent-lime);font-weight:800;font-size:26px;margin-bottom:20px;text-shadow:0 3px 0 rgba(16,111,20,0.06) }
+  .meal-approved{ text-align:center;color:var(--accent-lime);font-weight:800;font-size:26px;margin-bottom:22px;text-shadow:0 3px 0 rgba(16,111,20,0.06) }
 
-  /* OUTER GREEN BOX — now TALL vertical box (not sleeping) */
+  /* OUTER GREEN BOX — tall vertical box (not sleeping) */
   .accepted-strip{
     width:100%;
     background:var(--dark-green);
     border-radius:12px;
-    padding:22px 12px;   /* generous vertical padding */
+    padding:28px 12px;   /* more vertical padding for tall look */
     display:flex;
     justify-content:center;
     align-items:center;
@@ -78,12 +87,12 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    border:14px solid var(--light-frame); /* light green frame */
+    border:14px solid var(--light-frame);
     box-shadow:0 8px 22px rgba(0,0,0,0.12) inset;
-    min-height:320px;   /* TALL inner area to match screenshot */
+    min-height:320px;   /* tall inner area matching screenshot */
   }
 
-  /* place the accepted pill centered horizontally and vertically inside the tall white frame */
+  /* center the accepted pill inside the tall white frame */
   .accepted-pill{width:88%;max-width:640px;height:120px;display:flex;align-items:center;justify-content:center}
   .accepted-pill svg{width:100%;height:100%;display:block}
 
@@ -91,12 +100,15 @@
   @media (max-width:420px){
     .card{padding:14px}
     .program{margin-bottom:20px}
-    .date-time{margin-bottom:14px}
-    .meal-approved{margin-bottom:14px}
-    .accepted-frame{min-height:240px;padding:12px}
+    .date-time{margin-bottom:18px}
+    .meal-approved{margin-bottom:18px}
+    .accepted-frame{min-height:260px;padding:12px}
     .accepted-pill{height:96px}
-    .meal-type{font-size:28px}
+    .meal-type{font-size:28px;margin-top:10px}
   }
+
+  /* prevent user zoom via double-tap on iOS: reduce tap highlight */
+  html, body, button, a { -webkit-tap-highlight-color: rgba(0,0,0,0); }
 </style>
 </head>
 <body>
@@ -113,7 +125,6 @@
       <div class="row">
         <img class="photo" alt="Cheruku Sai Kumar" src="https://i.postimg.cc/3NnwdHd3/cherukusai.jpg"
              onerror="this.onerror=null;this.src='https://i.imgur.com/0KXQm7T.png'">
-
         <div class="info">
           <div class="meal-type" id="mealType">Lunch</div>
           <div class="user-id" id="userId">12311129</div>
@@ -134,35 +145,40 @@
       <!-- TALL green outer strip -->
       <div class="accepted-strip" role="region" aria-label="Accepted area">
         <div class="accepted-frame" role="img" aria-label="Accepted frame">
-          <!-- center the accepted pill -->
           <div class="accepted-pill" aria-hidden="true">
             <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Accepted">
-              <!-- long pill shape (kept horizontal) -->
               <rect x="40" y="50" rx="80" width="820" height="120" fill="#fff" stroke="#0b6f2b" stroke-width="10"/>
-              <!-- left small circle -->
               <circle cx="170" cy="110" r="44" fill="#10ef2d" stroke="#0b6f2b" stroke-width="8"/>
-              <!-- check mark -->
               <path d="M150 110 l22 22 l36 -40" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- ACCEPTED text -->
               <text x="250" y="135" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="68" fill="#10ef2d">ACCEPTED</text>
-              <!-- inner light border -->
               <rect x="70" y="70" rx="64" width="760" height="80" fill="none" stroke="#e6f7ea" stroke-width="8"/>
             </svg>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 
 <script>
-  // Elements
+  // --- Prevent pinch & gesture zoom for browsers that still allow it ---
+  // Note: meta viewport disables zoom in most browsers. These handlers cover iOS gesturestart and double-tap.
+  window.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+  // Prevent double-tap zoom on iOS by blocking quick repeated taps (simple approach)
+  let lastTouch = 0;
+  window.addEventListener('touchend', function (e) {
+    const now = Date.now();
+    if (now - lastTouch <= 300) {
+      e.preventDefault();
+    }
+    lastTouch = now;
+  }, { passive: false });
+
+  // --- Date/time + countdown (unchanged behavior) ---
   const countCircle = document.getElementById('countCircle');
   const dateDisplay = document.getElementById('dateDisplay');
   const timeDisplay = document.getElementById('timeDisplay');
   const mealApprovedText = document.getElementById('mealApprovedText');
 
-  // Date/time
   function updateDateTime(){
     const now = new Date();
     const options = { year:'numeric', month:'short', day:'2-digit' };
@@ -176,30 +192,29 @@
   updateDateTime();
   setInterval(updateDateTime, 1000);
 
-  // Countdown
+  // 30s countdown
   let countdown = 30;
   let interval = null;
   function renderCount(){ countCircle.textContent = String(countdown); }
   function startCountdown(){
-    if(interval) clearInterval(interval);
+    if (interval) clearInterval(interval);
     countdown = 30;
     renderCount();
     interval = setInterval(()=>{
       countdown--;
-      if(countdown <= 0){
+      if (countdown <= 0){
         clearInterval(interval);
         countCircle.textContent = '0';
         countCircle.style.color = '#c62828';
         mealApprovedText.textContent = 'Expired';
         mealApprovedText.style.color = '#b00020';
       } else renderCount();
-    },1000);
+    }, 1000);
   }
   startCountdown();
 
-  // quick reset by pressing 'r'
-  window.addEventListener('keydown', e => { if(e.key === 'r') startCountdown(); });
+  // reset with 'r' while testing
+  window.addEventListener('keydown', e => { if (e.key === 'r') startCountdown(); });
 </script>
 </body>
 </html>
-
