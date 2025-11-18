@@ -2,252 +2,304 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<!-- Disable pinch/double-tap zoom but allow vertical scroll -->
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-<title>Mess Pass — Adjusted Top Bar</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mess Pass</title>
+
 <style>
   :root{
-    --bg:#f4f5f6;
-    --card:#ffffff;
-    --muted:#e6e6e6;
-    --text:#222;
-    --accent-lime:#10ef2d;
-    --dark-green:#13521a;
-    --light-frame:rgba(205,232,198,0.95);
+    --card-width:420px;
+    --card-radius:14px;
+    --green:#28a745;
+    --brown:#7a2f21;
   }
-  *{box-sizing:border-box}
-  html,body{
-    height:100%;
+  *{box-sizing:border-box;}
+  body{
     margin:0;
-    background:var(--bg);
-    font-family:'Poppins',sans-serif;
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    touch-action: pan-y; /* allow vertical scroll, block pinch */
+    background:#efefef;
+    font-family:"Segoe UI",Arial;
   }
-
-  /* TOP BAR: centered and only as wide as the card */
-  .top-bar{
-    position:fixed;
-    top:10px;                              /* small gap from top of screen */
-    left:50%;
-    transform:translateX(-50%);            /* center horizontally */
-    width: min(420px, calc(100% - 32px));  /* same max width as card with side gaps */
-    height:56px;
-    background:#3b3b3b;
+  .center{
+    display:flex;
+    justify-content:center;
+    padding:20px 10px;
+  }
+  .topbar{
+    width:100%;
+    max-width:var(--card-width);
+    background:#333;
+    height:64px;
+    border-radius:12px;
     color:#fff;
     display:flex;
-    align-items:center;
     justify-content:center;
-    z-index:200;
-    border-radius:10px;
-    box-shadow:0 8px 22px rgba(0,0,0,0.18);
-    padding-top:6px;
+    align-items:center;
+    font-size:20px;
+    font-weight:600;
+    position:relative;
   }
-  .drag-handle{
+  .handle{
     position:absolute;
     top:10px;
     left:50%;
     transform:translateX(-50%);
-    width:56px;height:6px;border-radius:6px;background:rgba(255,255,255,0.85)
-  }
-  .top-bar .title{font-weight:600;font-size:18px}
-  .top-bar .close{position:absolute;right:12px;top:14px;color:#fff;font-size:20px;opacity:0.95}
-
-  /* Layout under top bar */
-  .page{
-    padding-top:86px; /* leave room for top bar and gap */
-    display:flex;
-    justify-content:center;
-    padding-bottom:40px;
+    width:70px;
+    height:6px;
+    border-radius:4px;
+    background:#d6d6d6;
   }
 
-  /* main card */
   .card{
     width:100%;
-    max-width:420px;
-    background:var(--card);
-    border-radius:14px;
-    padding:18px;
-    box-shadow:0 12px 28px rgba(0,0,0,0.12);
-    border:1px solid rgba(0,0,0,0.04);
+    max-width:var(--card-width);
+    background:white;
+    margin-top:15px;
+    border-radius:var(--card-radius);
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
     position:relative;
-    -webkit-user-select:none; user-select:none;
   }
 
-  /* countdown top-right */
-  .count-circle{
-    position:absolute; right:14px; top:14px;
-    width:42px; height:36px; border-radius:12px;
-    background:var(--muted); display:flex; align-items:center; justify-content:center;
-    font-weight:800; color:#555; font-size:15px; box-shadow:0 3px 8px rgba(0,0,0,0.12);
-  }
+ .timer-box{
+    position:absolute;
+    top:18px;
+    right:16px;
 
-  /* header row: image left, info right */
-  .row{display:flex; gap:14px; align-items:flex-start}
-  .photo{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,0,0,0.09);box-shadow:0 6px 20px rgba(0,0,0,0.12)}
-  .info{flex:1}
+    width:40px;     /* small width */
+    height:32px;    /* same height */
 
-  /* shift 'Lunch' down so it begins below the timer */
-  .meal-type{
-    font-size:32px; font-weight:800; margin-top:16px; /* moved down */
-  }
-  .user-id{font-weight:800; margin-top:8px}
-  .user-name{margin-top:6px; font-weight:600}
-  .mess-center{margin-top:4px; font-weight:600; color:var(--text)}
+    background:#b3b3b3;
+    border-radius:14px;   /* ← smoother, rounded edges */
 
-  /* program -> bigger vertical gap below */
-  .program{color:#6b564a88; margin-top:14px; margin-bottom:28px; font-weight:600; line-height:1.45}
-
-  /* date/time and gap to Meal Approved */
-  .date-time{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; font-weight:700; font-size:17px}
-  .meal-approved{text-align:center; color:var(--accent-lime); font-weight:800; font-size:26px; margin-bottom:22px; text-shadow:0 3px 0 rgba(16,111,20,0.06)}
-
-  /* OUTER GREEN vertical box (tall) */
-  .accepted-strip{
-    width:100%;
-    background:var(--dark-green);
-    border-radius:12px;
-    padding:28px 12px;   /* tall look */
     display:flex;
-    justify-content:center;
     align-items:center;
-    margin-top:6px;
+    justify-content:center;
+
+    font-size:18px;
+    font-weight:700;
+    color:#222;
+
+    box-shadow:
+      inset 0 2px 4px rgba(255,255,255,0.5),
+      inset 0 -2px 4px rgba(0,0,0,0.08),
+      0 6px 14px rgba(0,0,0,0.12);
+}
+
+  .content{padding:20px;}
+
+  .profile-row{
+    display:flex;
+    gap:14px;
   }
 
-  /* inner white frame (tall) */
-  .accepted-frame{
-    width:92%;
-    max-width:720px;
-    background:#fff;
-    border-radius:12px;
+  .avatar{
+    width:110px;height:110px;border-radius:50%;
+    background:#0b8f6b;color:white;font-size:38px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;
+    border:5px solid rgba(255,255,255,0.6);
+    box-shadow:0 8px 20px rgba(0,0,0,0.18);
+    flex-shrink:0;
+  }
+
+.meal-title{
+    font-size:28px;
+    font-weight:900;   /* already correct */
+    margin:16px 0 4px 0;
+    letter-spacing:-0.5px;
+
+    /* NEW: mimic thick rendering */
+    text-shadow:0 1px 0 rgba(0,0,0,0.25);
+}
+
+ .id, .line{
+    font-weight:700;
+    text-shadow:0 1px 0 rgba(0,0,0,0.18);
+}
+  .course{margin-top:12px;font-size:15px;color:#444;}
+
+  .dt-row{
+    display:flex;
+    gap:28px;
+    margin-top:20px;
+  }
+ .dt, .tm{
+    font-weight:700;
+    color:#111;
+    text-shadow:0 1px 0 rgba(0,0,0,0.12);
+}
+
+
+  .approved{
+    margin-top:22px;
+    font-size:28px;
+    font-weight:900;
+    color:var(--green);
+    text-align:center;
+  }
+
+  .rate-btn{
+    border:2px solid var(--brown);
+    padding:8px 14px;
+    border-radius:10px;
+    font-weight:800;
+    width:max-content;
+    margin:10px auto 0;
+  }
+
+  .stars{
+    display:none;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+  }
+  .star{
+    font-size:30px;
+    color:#bbb;
+    cursor:pointer;
+  }
+  .star.active{color:#ffcc00;}
+
+  #thanks{
+    text-align:center;
+    margin-top:10px;
+    font-weight:700;
+    color:#333;
+  }
+
+  .bottom-box{
+    background:#7a2f21;
     padding:18px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border:14px solid var(--light-frame);
-    box-shadow:0 8px 22px rgba(0,0,0,0.12) inset;
-    min-height:320px;
+    border-bottom-left-radius:var(--card-radius);
+    border-bottom-right-radius:var(--card-radius);
+    margin-top:20px;
   }
 
-  .accepted-pill{width:88%; max-width:640px; height:120px; display:flex; align-items:center; justify-content:center}
-  .accepted-pill svg{width:100%;height:100%;display:block}
-
-  /* responsive tweaks */
-  @media (max-width:420px){
-    .page{padding-top:86px}
-    .card{padding:14px}
-    .program{margin-bottom:20px}
-    .date-time{margin-bottom:18px}
-    .meal-approved{margin-bottom:18px}
-    .accepted-frame{min-height:260px;padding:12px}
-    .accepted-pill{height:96px}
-    .meal-type{font-size:28px;margin-top:14px}
+  .white-inner{
+    background:#fff;
+    height:420px;
+    border-radius:10px;
   }
+
 </style>
 </head>
 <body>
-  <!-- centered top bar (same width as card) -->
-  <div class="top-bar" role="banner" aria-label="Top bar">
-    <div class="drag-handle" aria-hidden="true"></div>
-    <div class="title">Mess Pass</div>
-    <div class="close" aria-hidden="true">✕</div>
-  </div>
 
-  <div class="page">
-    <main class="card" role="main" aria-label="Mess Pass Card">
-      <div class="count-circle" id="countCircle" aria-live="polite">30</div>
+<div class="center">
+  <div>
+  
+    <div class="topbar">
+      <div class="handle"></div>
+      Mess Pass
+    </div>
 
-      <div class="row">
-        <img class="photo" alt="Cheruku Sai" src="https://i.postimg.cc/3NnwdHd3/cherukusai.jpg"
-             onerror="this.onerror=null;this.src='https://i.imgur.com/0KXQm7T.png'">
-        <div class="info">
-          <div class="meal-type" id="mealType">Lunch</div>
-          <div class="user-id" id="userId">12311129</div>
-          <div class="user-name" id="userName">Cheruku Sai Kumar</div>
-          <div class="mess-center" id="messCenter">Mess-Centre-02</div>
-        </div>
-      </div>
+    <div class="card">
 
-      <div class="program" id="programName">P132:B.Tech. (Computer Science and Engineering)(2023)</div>
+      <!-- FINAL ROUNDED RECTANGLE TIMER -->
+      <div class="timer-box" id="timer">30</div>
 
-      <div class="date-time" aria-label="Date and time">
-        <div id="dateDisplay">--</div>
-        <div id="timeDisplay">--</div>
-      </div>
+      <div class="content">
 
-      <div class="meal-approved" id="mealApprovedText">Meal Approved</div>
+        <div class="profile-row">
+          <div class="avatar" id="avatarInitials">CS</div>
 
-      <div class="accepted-strip" role="region" aria-label="Accepted area">
-        <div class="accepted-frame" role="img" aria-label="Accepted frame">
-          <div class="accepted-pill" aria-hidden="true">
-            <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Accepted">
-              <rect x="40" y="50" rx="80" width="820" height="120" fill="#fff" stroke="#0b6f2b" stroke-width="10"/>
-              <circle cx="170" cy="110" r="44" fill="#10ef2d" stroke="#0b6f2b" stroke-width="8"/>
-              <path d="M150 110 l22 22 l36 -40" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <text x="250" y="135" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="68" fill="#10ef2d">ACCEPTED</text>
-              <rect x="70" y="70" rx="64" width="760" height="80" fill="none" stroke="#e6f7ea" stroke-width="8"/>
-            </svg>
+          <div>
+            <div class="meal-title">Dinner</div>
+            <div class="id">12311129</div>
+            <div class="line">Cheruku Sai Kumar</div>
+            <div class="line">Mess-Centre-02</div>
           </div>
         </div>
-      </div>
 
-    </main>
+        <div class="course">P132: B.Tech. (Computer Science and Engineering)(2023)</div>
+
+        <div class="dt-row">
+          <div class="dt" id="dateText">Nov 18, 2025</div>
+          <div class="tm" id="timeText">04:19 PM</div>
+        </div>
+
+        <div class="approved">Meal Approved</div>
+
+        <div class="rate-btn" id="rateBtn">⭐ RATE US</div>
+
+        <div class="stars" id="stars">
+          <span class="star" data-v="1">★</span>
+          <span class="star" data-v="2">★</span>
+          <span class="star" data-v="3">★</span>
+          <span class="star" data-v="4">★</span>
+          <span class="star" data-v="5">★</span>
+        </div>
+
+        <div id="thanks"></div>
+
+        <div class="bottom-box">
+          <div class="white-inner"></div>
+        </div>
+
+      </div>
+    </div>
   </div>
+</div>
 
 <script>
-  // gesture guards for pinch/double-tap (helps on iOS/Android)
-  function stopGesture(e){ e.preventDefault(); }
-  window.addEventListener('gesturestart', stopGesture, {passive:false});
-  let lastTouch = 0;
-  window.addEventListener('touchend', function (e) {
-    const now = Date.now();
-    if (now - lastTouch <= 300) e.preventDefault();
-    lastTouch = now;
-  }, { passive: false });
+/* Avatar initials */
+(function(){
+  const name="Cheruku Sai Kumar".split(" ");
+  document.getElementById("avatarInitials").textContent=
+    (name[0][0]+name[1][0]).toUpperCase();
+})();
 
-  // Date/time + 30s countdown
-  const countCircle = document.getElementById('countCircle');
-  const dateDisplay = document.getElementById('dateDisplay');
-  const timeDisplay = document.getElementById('timeDisplay');
-  const mealApprovedText = document.getElementById('mealApprovedText');
+/* Countdown 30→1 */
+(function(){
+  const t=document.getElementById("timer");
+  let s=30;
+  t.textContent=s;
+  const id=setInterval(()=>{
+    s--;
+    if(s<1){
+      t.textContent=1;
+      clearInterval(id);
+      return;
+    }
+    t.textContent=s;
+  },1000);
+})();
 
-  function updateDateTime(){
-    const now = new Date();
-    const options = { year:'numeric', month:'short', day:'2-digit' };
-    dateDisplay.textContent = now.toLocaleDateString('en-US', options).replace(',','');
-    let hrs = now.getHours();
-    const mins = String(now.getMinutes()).padStart(2,'0');
-    const ampm = hrs >= 12 ? 'PM' : 'AM';
-    hrs = hrs % 12 || 12;
-    timeDisplay.textContent = `${hrs}:${mins} ${ampm}`;
-  }
-  updateDateTime();
-  setInterval(updateDateTime,1000);
+/* Live date + time */
+function updateDT(){
+  const d=new Date();
+  const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  document.getElementById("dateText").textContent =
+    `${m[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  
+  let h=d.getHours(), mm=d.getMinutes().toString().padStart(2,"0");
+  let ap=h>=12?"PM":"AM";
+  h=h%12||12;
+  document.getElementById("timeText").textContent=`${h}:${mm} ${ap}`;
+}
+updateDT();setInterval(updateDT,1000);
 
-  let countdown = 30;
-  let interval = null;
-  function renderCount(){ countCircle.textContent = String(countdown); }
-  function startCountdown(){
-    if (interval) clearInterval(interval);
-    countdown = 30;
-    renderCount();
-    interval = setInterval(()=>{
-      countdown--;
-      if (countdown <= 0){
-        clearInterval(interval);
-        countCircle.textContent = '0';
-        countCircle.style.color = '#c62828';
-        mealApprovedText.textContent = 'Expired';
-        mealApprovedText.style.color = '#b00020';
-      } else renderCount();
-    },1000);
-  }
-  startCountdown();
+/* Rating */
+(()=>{
+  const btn=document.getElementById("rateBtn");
+  const stars=document.getElementById("stars");
+  const thanks=document.getElementById("thanks");
 
-  // reset by 'r' while testing
-  window.addEventListener('keydown', e => { if (e.key === 'r') startCountdown(); });
+  btn.onclick=()=>{
+    stars.style.display=(stars.style.display==="flex"?"none":"flex");
+    thanks.style.display="none";
+  };
+
+  document.querySelectorAll(".star").forEach(st=>{
+    st.onclick=()=>{
+      const v=parseInt(st.dataset.v);
+      document.querySelectorAll(".star").forEach(x=>{
+        x.classList.toggle("active",parseInt(x.dataset.v)<=v);
+      });
+      thanks.textContent=`Thanks for rating ${v}★!`;
+      thanks.style.display="block";
+    };
+  });
+})();
 </script>
+
 </body>
 </html>
