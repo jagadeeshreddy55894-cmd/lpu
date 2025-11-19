@@ -41,7 +41,7 @@
   .topbar span{font-size:20px;font-weight:600}
 
   /* center container */
-  .wrap{display:flex;justify-content:center;padding:12px 8px 40px;}
+  .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
 
   /* card */
   .card{
@@ -88,33 +88,55 @@
   .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
   .title-col{flex:1}
-  /* MEAL TITLE moved down (larger top margin) to align below timer bottom */
+  /* MEAL TITLE lowered to align below timer bottom */
   .meal-title{
     font-size:34px;
     font-weight:900;
-    margin-top:22px;   /* moved down to be below timer */
-    margin-bottom:10px;
-    text-shadow:0 1px 0 rgba(0,0,0,0.06)
+    margin-top:26px;     /* increased so Dinner starts lower */
+    margin-bottom:16px;  /* more room before id/name */
+    text-shadow:0 1px 0 rgba(0,0,0,0.06);
   }
-  .sid{font-size:18px;font-weight:800;margin-bottom:6px}
-  .line{font-size:17px;margin-bottom:4px;color:#222}
 
-  /* course code: wrap where you wanted */
-  .course{font-size:16px; margin-top:8px; margin-bottom:18px; font-weight:600; line-height:1.35; color:#222; padding-right:8px}
+  /* Number / Name / Mess center - same style exactly */
+  .sid, .line {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
 
-  /* date/time row: spaced and lighter weight, but same color */
-  .dt-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 6px}
+  /* course code: more breathing room top & bottom */
+  .course{
+    font-size:18px;
+    font-weight:600;
+    margin-top:18px;     /* increased */
+    margin-bottom:26px;  /* increased */
+    line-height:1.45;
+    color:#222;
+    padding-right:8px;
+  }
+
+  /* date/time row: more spacing above & below */
+  .dt-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:12px;       /* increased */
+    margin-bottom:22px;    /* increased */
+    padding:0 6px;
+  }
   .dt-row .date, .dt-row .time{font-size:18px;font-weight:700}
 
-  /* meal approved - tightened spacing */
+  /* meal approved - tightened but with nicer gap */
   .approved{
     font-size:28px;
     font-weight:900;
     color:var(--green);
     text-align:center;
-    margin-top:10px;    /* tightened */
-    margin-bottom:6px;  /* tightened */
-    text-shadow:0 1px 0 rgba(0,0,0,0.03)
+    margin-top:16px;     /* more space above */
+    margin-bottom:10px;  /* more space below */
+    text-shadow:0 1px 0 rgba(0,0,0,0.03);
   }
 
   /* rate button area - reduce gap to brown box */
@@ -124,7 +146,7 @@
   }
   .rate-btn{display:inline-block;padding:8px 16px;border-radius:10px;border:2px solid var(--brown);font-weight:800;background:#fff}
 
-  /* brown box sits closer to rate us */
+  /* brown box sits closer to rate us & reduced inner height to match */
   .brown-box{
     background:var(--brown);
     padding:14px;             /* reduced */
@@ -189,7 +211,7 @@
 
       <div class="brown-box">
         <div class="brown-inner" id="brownInner">
-          <!-- optional accepted image can go here if you want -->
+          <!-- optional accepted image or animation can be inserted here -->
         </div>
       </div>
 
@@ -202,9 +224,7 @@
   const avatarImg = document.getElementById('avatarImg');
   const initialsEl = document.getElementById('avatarInitials');
   avatarImg.addEventListener('error', ()=> { avatarImg.style.display='none'; initialsEl.style.display='flex'; });
-  // if image loads, hide initials
   avatarImg.addEventListener('load', ()=> { initialsEl.style.display='none'; });
-  // show initials by default until load
   initialsEl.style.display = 'flex';
 })();
 
@@ -215,7 +235,12 @@
   el.textContent = sec;
   const id = setInterval(()=>{
     sec--;
-    if(sec <= 0){ el.textContent = 1; clearInterval(id); return; }
+    // keep showing 1 at the end per your instruction (30 -> 1)
+    if(sec <= 1){
+      el.textContent = 1;
+      clearInterval(id);
+      return;
+    }
     el.textContent = sec;
   },1000);
 })();
