@@ -1,247 +1,216 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mess Pass</title>
 
 <style>
-:root{
-  --card-max:520px;   /* WIDER CARD */
-  --card-radius:14px;
-  --green:#36b24a;
-  --brown:#7a2f21;
-}
+    :root {
+        --card-radius: 22px;
+    }
 
-/* RESET */
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  background:#efefef;
-  font-family:"Segoe UI",Roboto,Arial,sans-serif;
-}
+    body {
+        font-family: Arial, sans-serif;
+        background: #e6e6e6;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-/* FULL-WIDTH TOP BAR */
-.topbar-wrap{
-  width:100%;
-  margin-top:10px;
-}
-.topbar{
-  width:100%;               /* FULL WIDTH */
-  height:70px;
-  background:#333;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:0;          /* NO RADIUS (matches your screenshot) */
-  position:relative;
-}
-.handle{
-  width:70px;
-  height:6px;
-  border-radius:4px;
-  background:#d6d6d6;
-  position:absolute;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-}
+    /* Top Black Bar */
+    .top-bar {
+        width: 100%;
+        background: #333;
+        padding: 18px 0 10px 0;
+        text-align: center;
+        border-bottom-left-radius: 22px;
+        border-bottom-right-radius: 22px;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+    }
 
-/* MAIN CENTER */
-.center{
-  width:100%;
-  display:flex;
-  justify-content:center;
-}
+    /* Little drag handle */
+    .handle {
+        width: 80px;
+        height: 7px;
+        background: #ccc;
+        border-radius: 10px;
+        margin: 0 auto 6px auto;
+    }
 
-.card{
-  width:94%;                 /* slightly smaller than before */
-  max-width:500px;           /* reduced max width */
-  background:#fff;
-  margin-top:12px;
-  border-radius:var(--card-radius);
-  box-shadow:0 6px 22px rgba(0,0,0,0.12);
-  position:relative;
-}
+    /* Main White Card */
+    .card {
+        width: 94%;      
+        max-width: 500px;
+        background: #fff;
+        margin-top: 15px;
+        border-radius: var(--card-radius);
+        box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+        padding-bottom: 25px;
+        position: relative;
+    }
 
+    /* Timer Box */
+    .timer-box {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #bfbfbf;
+        padding: 14px 20px;
+        font-size: 22px;
+        font-weight: 700;
+        color: #333;
+        border-radius: 28px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+    }
 
-/* TIMER */
-.timer-box{
-  position:absolute;
-  top:12px;
-  right:12px;
-  width:58px;
-  height:58px;
-  border-radius:18px;
-  background:#bfbfbf;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:20px;
-}
+    /* Profile + Dinner Row */
+    .profile-row {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 22px;
+        padding-bottom: 14px;
+        margin-top: 12px;
+    }
 
-/* CONTENT */
-.content{padding:18px;}
+    .profile-pic {
+        width: 115px;
+        height: 115px;
+        background: #0a8f63;
+        border-radius: 50%;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.profile{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
+    /* Name + Dinner block */
+    .details {
+        margin-top: 10px;
+    }
 
-.avatar{
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#0b8f6b,#0b7a5f);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:34px;
-  font-weight:800;
-}
+    .details .title {
+        font-size: 32px;
+        font-weight: 700;
+    }
 
-.title-col{flex:1;}
-.meal{font-size:30px;font-weight:900;margin-top:16px;}
-.sid{font-size:18px;font-weight:800;}
-.line{font-size:17px;margin-top:3px;}
+    .details .id {
+        font-size: 22px;
+        font-weight: 700;
+    }
 
-.course{
-  font-size:16px;
-  margin-top:14px;
-  font-weight:600;
-  line-height:1.35;
-}
+    /* Course Code */
+    .course-code {
+        padding: 0 22px;
+        margin-top: 10px;
+        margin-bottom: 18px;
+        font-size: 17px;
+        line-height: 1.35;
+    }
 
-/* DATE TIME ROW */
-.dt-row{
-  display:flex;
-  gap:30px;
-  margin-top:16px;
-  font-size:18px;
-  font-weight:800;
-}
+    /* Date + Time Row */
+    .date-time {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 22px;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 22px;
+    }
 
-.approved{
-  text-align:center;
-  font-size:28px;
-  margin-top:18px;
-  color:var(--green);
-  font-weight:900;
-}
+    /* Meal Approved */
+    .meal-status {
+        text-align: center;
+        font-size: 26px;
+        font-weight: 700;
+        color: #1fb12f;
+        margin-bottom: 20px;
+    }
 
-.rate{
-  margin:12px auto;
-  width:max-content;
-  padding:8px 14px;
-  border-radius:12px;
-  border:2px solid var(--brown);
-  font-weight:800;
-}
+    /* Rate Us Button */
+    .rate-us-btn {
+        display: block;
+        margin: 0 auto 22px auto;
+        background: white;
+        border-radius: 10px;
+        padding: 10px 26px;
+        font-size: 18px;
+        font-weight: 700;
+        border: 2px solid #a2442c;
+    }
 
-.bottom{
-  margin-top:18px;
-  background:var(--brown);
-  padding:18px;
-  border-bottom-left-radius:14px;
-  border-bottom-right-radius:14px;
-}
-
-.inner-white{
-  background:#fff;
-  height:380px;
-  border-radius:10px;
-}
+    /* Brown box */
+    .big-box {
+        width: 88%;
+        height: 340px;
+        border: 14px solid #7a2d1e;
+        border-radius: 16px;
+        margin: 0 auto;
+    }
 </style>
 </head>
 
 <body>
 
-<!-- FULL WIDTH TOPBAR -->
-<div class="topbar-wrap">
-  <div class="topbar">
+<div class="top-bar">
     <div class="handle"></div>
     Mess Pass
-  </div>
 </div>
 
-<div class="center">
-  <div class="card">
+<div class="card">
 
     <div class="timer-box" id="timer">30</div>
 
-    <div class="content">
+    <div class="profile-row">
+        <div class="profile-pic">CS</div>
 
-      <div class="profile">
-        <div class="avatar" id="initials">CS</div>
-        <div class="title-col">
-          <div class="meal">Dinner</div>
-          <div class="sid">12311129</div>
-          <div class="line">Cheruku Sai Kumar</div>
-          <div class="line">Mess-Centre-02</div>
+        <div class="details">
+            <div class="title">Dinner</div>
+            <div class="id">12311129</div>
+            Cheruku Sai Kumar<br>
+            Mess-Centre-02
         </div>
-      </div>
-
-      <div class="course">
-        P132: B.Tech. (Computer Science and Engineering)(2023)
-      </div>
-
-      <div class="dt-row">
-        <div id="date">Nov 19, 2025</div>
-        <div id="time">04:08 PM</div>
-      </div>
-
-      <div class="approved">Meal Approved</div>
-
-      <div class="rate">⭐ RATE US</div>
-
-      <div class="bottom">
-        <div class="inner-white"></div>
-      </div>
-
     </div>
 
-  </div>
+    <div class="course-code">
+        P132: B.Tech. (Computer Science and Engineering)(2023)
+    </div>
+
+    <div class="date-time">
+        <span>Nov 20, 2025</span>
+        <span id="time">1:03 AM</span>
+    </div>
+
+    <div class="meal-status">Meal Approved</div>
+
+    <button class="rate-us-btn">⭐ RATE US</button>
+
+    <div class="big-box"></div>
+
 </div>
 
 <script>
-/* initials */
-(function(){
-  const n = "Cheruku Sai Kumar".split(" ");
-  document.getElementById("initials").textContent = (n[0][0] + n[1][0]).toUpperCase();
-})();
+    let counter = 30;
+    const timer = document.getElementById("timer");
 
-/* countdown */
-(function(){
-  let t = 30;
-  const box = document.getElementById("timer");
-  const id = setInterval(()=>{
-    t--;
-    if(t < 1){ t = 1; clearInterval(id); }
-    box.textContent = t;
-  },1000);
-})();
+    let x = setInterval(() => {
+        counter--;
+        timer.textContent = counter;
 
-/* dynamic date & time */
-function pad(n){ return n<10?"0"+n:n; }
-function upd(){
-  const now = new Date();
-  const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-  document.getElementById("date").textContent =
-    `${m[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
-
-  let h = now.getHours();
-  let ap = h>=12?"PM":"AM";
-  h = h%12 || 12;
-
-  document.getElementById("time").textContent = `${h}:${pad(now.getMinutes())} ${ap}`;
-}
-upd();
-setInterval(upd,1000);
+        if (counter <= 0) {
+            clearInterval(x);
+        }
+    }, 1000);
 </script>
+
 </body>
 </html>
-
