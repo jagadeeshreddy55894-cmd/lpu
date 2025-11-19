@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-<title>Mess Pass — Adjusted</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Mess Pass — Adjusted Topbar & Width</title>
 <style>
   :root{
-    --card-width:420px;
+    --card-max:460px;      /* increased max width for the card as requested */
     --card-radius:14px;
     --green:#36b24a;
     --brown:#7a2f21;
@@ -18,51 +18,56 @@
     height:100%;
     margin:0;
     background:#efefef;
-    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing:antialiased;
   }
 
-  /* wrapper: reduced top gap so card sits closer to topbar */
+  /* wrapper */
   .center-wrap{
     width:100%;
     min-height:100vh;
     display:flex;
     align-items:flex-start;
     justify-content:center;
-    padding:12px 12px 40px;   /* <--- reduced top padding from 26 to 12 */
+    padding:12px 12px 40px;
   }
 
   .inner{
     width:100%;
-    /* on wide screens keep a fixed max; on phones we allow larger percentage */
-    max-width:var(--card-width);
+    max-width:var(--card-max);
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:8px;
   }
 
-  /* top bar */
-  .topbar{
+  /* TOPBAR: now wider and pill-shaped so it doesn't "end" at the card */
+  .topbar-wrap{
     width:100%;
+    display:flex;
+    justify-content:center;
+  }
+  .topbar{
+    width:96%;               /* takes most of viewport width but stays centered */
+    max-width:760px;         /* controls max expansion on wide screens */
     height:64px;
     background:#333;
     color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:10px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    border-radius:16px;      /* more rounded, pill-like */
+    box-shadow:0 8px 24px rgba(0,0,0,0.14);
     position:relative;
   }
   .handle{
-    position:absolute;top:10px;left:50%;transform:translateX(-50%);width:70px;height:6px;border-radius:4px;background:#d6d6d6;
+    position:absolute; top:10px; left:50%; transform:translateX(-50%); width:70px; height:6px; border-radius:4px; background:#d6d6d6;
   }
 
-  /* card: responsive width on small screens */
+  /* card: slightly wider max width than before */
   .card{
-    width:92%;                 /* <--- phone: take most of width */
-    max-width:var(--card-width);
+    width:94%;
+    max-width:var(--card-max);
     background:#fff;
     border-radius:var(--card-radius);
     box-shadow:0 10px 30px var(--shadow);
@@ -83,7 +88,7 @@
     z-index:5;
   }
 
-  .content{padding:18px 18px 18px 18px; padding-top:16px;} /* reduced paddings */
+  .content{padding:16px 18px 18px 18px;}
   .profile-row{display:flex;gap:12px;align-items:flex-start}
   .avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#0b8f6b,#0b7a5f);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:34px;border:6px solid rgba(255,255,255,0.75);box-shadow:0 8px 22px rgba(0,0,0,0.16);flex-shrink:0}
 
@@ -92,55 +97,39 @@
   .id{font-weight:800;font-size:18px;margin:2px 0;text-shadow:0 1px 0 rgba(0,0,0,0.18)}
   .line{font-size:16px;margin:2px 0;color:#222;text-shadow:0 1px 0 rgba(0,0,0,0.12)}
 
-  /* course: tuned width so it wraps like sample */
+  /* course: width tuned to wrap similarly; with increased card width this will display full */
   .course{
-    margin-top:10px;
-    color:#222;
-    font-size:15.5px;
-    font-weight:600;
-    line-height:1.30;
-    width:230px;               /* tuned to wrap where you wanted */
-    word-break:break-word;
-    white-space:normal;
-    text-shadow:0 1px 0 rgba(0,0,0,0.12);
+    margin-top:10px;color:#222;font-size:15.5px;font-weight:600;line-height:1.30;
+    width:260px;               /* slightly larger for wider card */
+    word-break:break-word;white-space:normal;text-shadow:0 1px 0 rgba(0,0,0,0.12);
   }
 
-  /* date + time row: tightened spacing */
+  /* date + time row */
   .dt-row{
-    display:flex;
-    justify-content:flex-start;
-    align-items:center;
-    margin-top:14px;           /* little less gap than before */
-    padding:0 6px;
-    gap:20px;                  /* decreased gap between date/time */
+    display:flex;justify-content:flex-start;align-items:center;margin-top:14px;padding:0 6px;gap:20px;
   }
   .dt,.tm{font-size:18px;font-weight:700;color:#111;text-shadow:0 1px 0 rgba(0,0,0,0.12)}
 
   .approved{text-align:center;margin-top:14px;font-size:28px;font-weight:900;color:var(--green);text-shadow:0 2px 0 rgba(0,0,0,0.04)}
   .rate-btn{display:inline-block;margin:10px auto 0;padding:8px 12px;border-radius:12px;border:2px solid var(--brown);background:#fff;font-weight:800;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,0.04)}
 
-  .stars{display:none;justify-content:center;gap:10px;margin-top:10px}
-  .star{font-size:30px;color:#bbb;cursor:pointer;user-select:none}
-  .star.active{color:#ffcc00}
-  #thanks{text-align:center;margin-top:8px;display:none;font-weight:700;color:#222}
-
   .bottom-brown{background:var(--brown);padding:16px;margin-top:14px;border-bottom-left-radius:var(--card-radius);border-bottom-right-radius:var(--card-radius)}
   .inner-white{background:#fff;border-radius:10px;height:380px;box-shadow: inset 0 2px 0 rgba(0,0,0,0.02);border:8px solid transparent}
 
-  @media (min-width:760px){
-    /* keep card centered and max width on larger screens */
-    .card{width:100%;max-width:var(--card-width)}
-    .course{width:280px}
-    .inner-white{height:420px}
+  @media (max-width:520px){
+    .topbar{width:96%}                 /* keep topbar wide on phones */
+    .card{width:96%}                   /* card uses more available width on small screens */
+    .course{width:220px}               /* adjust wrap on narrow screens */
+    .avatar{width:96px;height:96px;font-size:32px}
+    .timer-box{width:52px;height:52px;border-radius:12px;top:12px;right:12px;font-size:18px}
+    .inner-white{height:460px}
   }
 
-  /* small tweaks on narrow phones */
-  @media (max-width:420px){
-    .card{width:92%}
-    .timer-box{width:52px;height:52px;border-radius:12px;top:12px;right:12px;font-size:18px}
-    .avatar{width:96px;height:96px;font-size:32px}
-    .course{width:210px}
-    .inner-white{height:460px}
+  @media (min-width:980px){
+    .topbar{width:80%;max-width:980px}
+    .card{max-width:540px}
+    .course{width:340px}
+    .inner-white{height:420px}
   }
 
   body, html { -webkit-text-size-adjust:100%; }
@@ -151,11 +140,15 @@
 <div class="center-wrap">
   <div class="inner">
 
-    <div class="topbar">
-      <div class="handle"></div>
-      Mess Pass
+    <!-- topbar wrap - pill like and wider than card -->
+    <div class="topbar-wrap">
+      <div class="topbar">
+        <div class="handle"></div>
+        Mess Pass
+      </div>
     </div>
 
+    <!-- card -->
     <div class="card">
       <div class="timer-box" id="timer">30</div>
 
@@ -183,16 +176,6 @@
           <div class="rate-btn" id="rateBtn">⭐&nbsp;RATE US</div>
         </div>
 
-        <div class="stars" id="stars">
-          <span class="star" data-v="1">★</span>
-          <span class="star" data-v="2">★</span>
-          <span class="star" data-v="3">★</span>
-          <span class="star" data-v="4">★</span>
-          <span class="star" data-v="5">★</span>
-        </div>
-
-        <div id="thanks"></div>
-
         <div class="bottom-brown">
           <div class="inner-white"></div>
         </div>
@@ -203,47 +186,41 @@
 </div>
 
 <script>
-/* Avatar initials */
+/* initials */
 (function(){
   const n = "Cheruku Sai Kumar".split(" ");
-  const initials = (n[0][0] + (n[1] ? n[1][0] : '')).toUpperCase();
-  document.getElementById('avatarInitials').textContent = initials;
+  document.getElementById('avatarInitials').textContent = (n[0][0] + (n[1] ? n[1][0] : '')).toUpperCase();
 })();
 
-/* Countdown 30 -> 1 */
+/* countdown 30->1 */
 (function(){
   const el = document.getElementById('timer');
-  let sec = 30;
-  el.textContent = sec;
+  let s = 30;
+  el.textContent = s;
   const id = setInterval(()=>{
-    sec--;
-    if(sec < 1){ el.textContent = 1; clearInterval(id); return; }
-    el.textContent = sec;
-  },1000);
+    s--;
+    if(s < 1){ el.textContent = 1; clearInterval(id); return; }
+    el.textContent = s;
+  }, 1000);
 })();
 
-/* Live date/time */
-function pad(n){return n<10?'0'+n:n;}
+/* live date/time */
+function pad(n){ return n<10 ? '0'+n : n; }
 function updateDT(){
-  const now=new Date();
+  const now = new Date();
   const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   document.getElementById('dateText').textContent = `${months[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
-  let h=now.getHours(), m=pad(now.getMinutes()); const ap=h>=12?'PM':'AM'; h=h%12||12;
+  let h = now.getHours(), m = pad(now.getMinutes());
+  const ap = h>=12 ? 'PM' : 'AM';
+  h = h%12 || 12;
   document.getElementById('timeText').textContent = `${pad(h)}:${m} ${ap}`;
 }
 updateDT(); setInterval(updateDT,1000);
 
-/* Rate stars */
+/* rate button (stars hidden until click) */
 (function(){
-  const rateBtn=document.getElementById('rateBtn'), stars=document.getElementById('stars'), thanks=document.getElementById('thanks');
-  rateBtn.onclick = ()=> { stars.style.display = stars.style.display==='flex' ? 'none' : 'flex'; thanks.style.display='none'; };
-  document.querySelectorAll('.star').forEach(s=>{
-    s.onclick = ()=>{
-      const v=parseInt(s.dataset.v,10);
-      document.querySelectorAll('.star').forEach(x=> x.classList.toggle('active', parseInt(x.dataset.v,10) <= v));
-      thanks.textContent = `Thanks for rating ${v}★!`; thanks.style.display='block';
-    };
-  });
+  const rateBtn = document.getElementById('rateBtn');
+  rateBtn.onclick = ()=>{ alert('Rate dialog placeholder — click stars not implemented in this trimmed demo.'); };
 })();
 </script>
 </body>
