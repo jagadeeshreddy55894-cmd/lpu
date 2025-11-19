@@ -1,215 +1,210 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mess Pass</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mess Pass — Final</title>
 <style>
-    :root {
-        --card-radius: 22px;
-    }
+  :root{
+    --card-max:500px;
+    --card-radius:22px;
+    --green:#1fb12f;
+    --brown:#7a2d1e;
+  }
 
-    body {
-        font-family: Arial, sans-serif;
-        background: #e6e6e6;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:#e9e9e9;
+    -webkit-font-smoothing:antialiased;
+  }
 
-    /* Top Black Bar */
-    .top-bar {
-        width: 100%;
-        background: #333;
-        padding: 18px 0 10px 0;
-        text-align: center;
-        border-bottom-left-radius: 22px;
-        border-bottom-right-radius: 22px;
-        color: white;
-        font-size: 22px;
-        font-weight: 600;
-        position: sticky;
-        top: 0;
-    }
+  /* FULL-WIDTH TOP BAR */
+  .topbar{
+    width:100%;
+    height:70px;
+    background:#333;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:0;
+    position:sticky;
+    top:0;
+    z-index:10;
+  }
+  .handle{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:80px; height:7px; border-radius:10px; background:#ddd; }
 
-    /* Little drag handle */
-    .handle {
-        width: 80px;
-        height: 7px;
-        background: #ccc;
-        border-radius: 10px;
-        margin: 0 auto 6px auto;
-    }
+  /* center area */
+  .center { width:100%; display:flex; justify-content:center; padding:10px 6px 40px; }
 
-    /* Main White Card */
-    .card {
-        width: 94%;      
-        max-width: 500px;
-        background: #fff;
-        margin-top: 15px;
-        border-radius: var(--card-radius);
-        box-shadow: 0 6px 22px rgba(0,0,0,0.12);
-        padding-bottom: 25px;
-        position: relative;
-    }
+  /* CARD (kept slightly narrower to match screenshots) */
+  .card{
+    width:94%;
+    max-width:var(--card-max);
+    background:#fff;
+    margin-top:12px;
+    border-radius:var(--card-radius);
+    box-shadow:0 8px 28px rgba(0,0,0,0.12);
+    position:relative;
+    padding-bottom:22px;
+    overflow:visible;
+  }
 
-    /* Timer Box */
-    .timer-box {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: #bfbfbf;
-        padding: 14px 20px;
-        font-size: 22px;
-        font-weight: 700;
-        color: #333;
-        border-radius: 28px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
-    }
+  /* TIMER - OVAL */
+  .timer-box{
+    position:absolute;
+    top:26px;                /* moved down slightly so it doesn't overlap Dinner text */
+    right:24px;              /* moved right a bit */
+    background:#bfbfbf;
+    padding:10px 28px;       /* wide padding -> oval shape */
+    border-radius:40px;      /* large radius = pill/oval */
+    font-weight:700;
+    font-size:20px;
+    color:#333;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 10px 18px rgba(0,0,0,0.08);
+    z-index:5;
+  }
 
-    /* Profile + Dinner Row */
-    .profile-row {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        padding: 22px;
-        padding-bottom: 14px;
-        margin-top: 12px;
-    }
+  /* profile row with more gap as requested */
+  .profile-row{
+    display:flex;
+    align-items:flex-start;
+    gap:22px;                /* increased gap between avatar & text */
+    padding:26px 22px 10px 22px;  /* top padding moved downward so title sits lower */
+  }
 
-    .profile-pic {
-        width: 115px;
-        height: 115px;
-        background: #0a8f63;
-        border-radius: 50%;
-        color: white;
-        font-size: 40px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  .avatar{
+    width:115px; height:115px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0b8f63,#0b7a5f);
+    color:white; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:40px; box-shadow:0 10px 24px rgba(0,0,0,0.14);
+    flex-shrink:0;
+  }
 
-    /* Name + Dinner block */
-    .details {
-        margin-top: 10px;
-    }
+  .title-col{ flex:1; }
+  .meal-title{ font-size:32px; font-weight:800; margin-top:6px; text-shadow:0 1px rgba(0,0,0,0.06); }
+  .id{ font-size:20px; font-weight:800; margin-top:6px; }
+  .line{ font-size:17px; margin-top:6px; color:#222; }
 
-    .details .title {
-        font-size: 32px;
-        font-weight: 700;
-    }
+  /* course code spacing */
+  .course-code{
+    padding:0 22px;
+    margin-top:10px;
+    margin-bottom:18px;
+    font-size:16.5px;
+    font-weight:600;
+    line-height:1.34;
+  }
 
-    .details .id {
-        font-size: 22px;
-        font-weight: 700;
-    }
+  /* DATE + TIME: increased gap above and below */
+  .date-time{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 22px;
+    font-size:19px;
+    font-weight:700;
+    margin-top:28px;    /* more gap above date/time */
+    margin-bottom:30px; /* more gap below date/time */
+  }
 
-    /* Course Code */
-    .course-code {
-        padding: 0 22px;
-        margin-top: 10px;
-        margin-bottom: 18px;
-        font-size: 17px;
-        line-height: 1.35;
-    }
+  /* Meal Approved + Rate */
+  .approved{ text-align:center; font-size:26px; font-weight:900; color:var(--green); margin-bottom:18px; }
+  .rate-btn{ display:block; margin:0 auto 22px auto; padding:10px 18px; border-radius:12px; border:2px solid var(--brown); background:#fff; font-weight:800; }
 
-    /* Date + Time Row */
-    .date-time {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 22px;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 22px;
-    }
+  /* brown box reduced height a bit */
+  .bottom-brown{ background:var(--brown); padding:18px; margin:0 22px; border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
+  .inner-white{ background:#fff; height:320px; border-radius:10px; }
 
-    /* Meal Approved */
-    .meal-status {
-        text-align: center;
-        font-size: 26px;
-        font-weight: 700;
-        color: #1fb12f;
-        margin-bottom: 20px;
-    }
-
-    /* Rate Us Button */
-    .rate-us-btn {
-        display: block;
-        margin: 0 auto 22px auto;
-        background: white;
-        border-radius: 10px;
-        padding: 10px 26px;
-        font-size: 18px;
-        font-weight: 700;
-        border: 2px solid #a2442c;
-    }
-
-    /* Brown box */
-    .big-box {
-        width: 88%;
-        height: 340px;
-        border: 14px solid #7a2d1e;
-        border-radius: 16px;
-        margin: 0 auto;
-    }
+  /* responsive tweaks */
+  @media (max-width:420px){
+    .avatar{width:98px;height:98px;font-size:34px}
+    .timer-box{padding:9px 22px; top:24px; right:16px; font-size:18px}
+    .meal-title{font-size:30px}
+    .course-code{font-size:15.5px}
+    .inner-white{height:360px}
+  }
 </style>
 </head>
-
 <body>
 
-<div class="top-bar">
+  <div class="topbar">
     <div class="handle"></div>
     Mess Pass
-</div>
+  </div>
 
-<div class="card">
+  <div class="center">
+    <div class="card">
+      <div class="timer-box" id="timer">30</div>
 
-    <div class="timer-box" id="timer">30</div>
-
-    <div class="profile-row">
-        <div class="profile-pic">CS</div>
-
-        <div class="details">
-            <div class="title">Dinner</div>
-            <div class="id">12311129</div>
-            Cheruku Sai Kumar<br>
-            Mess-Centre-02
+      <div class="profile-row">
+        <div class="avatar" id="avatarInitials">CS</div>
+        <div class="title-col">
+          <div class="meal-title">Dinner</div>
+          <div class="id">12311129</div>
+          <div class="line">Cheruku Sai Kumar</div>
+          <div class="line">Mess-Centre-02</div>
         </div>
+      </div>
+
+      <div class="course-code" id="course">P132: B.Tech. (Computer Science and Engineering)(2023)</div>
+
+      <div class="date-time">
+        <div id="dateText">Nov 20, 2025</div>
+        <div id="timeText">1:03 AM</div>
+      </div>
+
+      <div class="approved">Meal Approved</div>
+
+      <button class="rate-btn" id="rateBtn">⭐ RATE US</button>
+
+      <div class="bottom-brown">
+        <div class="inner-white"></div>
+      </div>
     </div>
-
-    <div class="course-code">
-        P132: B.Tech. (Computer Science and Engineering)(2023)
-    </div>
-
-    <div class="date-time">
-        <span>Nov 20, 2025</span>
-        <span id="time">1:03 AM</span>
-    </div>
-
-    <div class="meal-status">Meal Approved</div>
-
-    <button class="rate-us-btn">⭐ RATE US</button>
-
-    <div class="big-box"></div>
-
-</div>
+  </div>
 
 <script>
-    let counter = 30;
-    const timer = document.getElementById("timer");
+  // avatar initials (keeps CS)
+  (function(){
+    const name = "Cheruku Sai Kumar";
+    const parts = name.trim().split(/\s+/);
+    const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+    document.getElementById('avatarInitials').textContent = initials.toUpperCase();
+  })();
 
-    let x = setInterval(() => {
-        counter--;
-        timer.textContent = counter;
+  // countdown 30 -> 1 (stops at 1)
+  (function(){
+    const el = document.getElementById('timer');
+    let sec = 30;
+    el.textContent = sec;
+    const id = setInterval(()=>{
+      sec--;
+      if(sec < 1){ el.textContent = 1; clearInterval(id); return; }
+      el.textContent = sec;
+    },1000);
+  })();
 
-        if (counter <= 0) {
-            clearInterval(x);
-        }
-    }, 1000);
+  // live date/time (keeps updating)
+  function pad(n){ return n<10 ? '0'+n : n; }
+  function updateDateTime(){
+    const now = new Date();
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    document.getElementById('dateText').textContent = `${months[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
+    let h = now.getHours(), m = pad(now.getMinutes()), ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('timeText').textContent = `${h}:${m} ${ap}`;
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+
+  // simple Rate button placeholder (no heavy UI)
+  document.getElementById('rateBtn').addEventListener('click', ()=>{
+    alert('Rate flow placeholder — implement rating UI here.');
+  });
 </script>
 
 </body>
