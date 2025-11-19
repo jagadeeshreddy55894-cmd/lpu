@@ -2,184 +2,205 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>Mess Pass — Adjusted Topbar & Width</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mess Pass</title>
+
 <style>
-  :root{
-    --card-max:460px;      /* increased max width for the card as requested */
-    --card-radius:14px;
-    --green:#36b24a;
-    --brown:#7a2f21;
-    --shadow: rgba(0,0,0,0.12);
-  }
+:root{
+  --card-max:520px;   /* WIDER CARD */
+  --card-radius:14px;
+  --green:#36b24a;
+  --brown:#7a2f21;
+}
 
-  *{box-sizing:border-box}
-  html,body{
-    height:100%;
-    margin:0;
-    background:#efefef;
-    font-family:"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#efefef;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+}
 
-  /* wrapper */
-  .center-wrap{
-    width:100%;
-    min-height:100vh;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:12px 12px 40px;
-  }
+/* FULL-WIDTH TOP BAR */
+.topbar-wrap{
+  width:100%;
+  margin-top:10px;
+}
+.topbar{
+  width:100%;               /* FULL WIDTH */
+  height:70px;
+  background:#333;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:0;          /* NO RADIUS (matches your screenshot) */
+  position:relative;
+}
+.handle{
+  width:70px;
+  height:6px;
+  border-radius:4px;
+  background:#d6d6d6;
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+}
 
-  .inner{
-    width:100%;
-    max-width:var(--card-max);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-  }
+/* MAIN CENTER */
+.center{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
 
-  /* TOPBAR: now wider and pill-shaped so it doesn't "end" at the card */
-  .topbar-wrap{
-    width:100%;
-    display:flex;
-    justify-content:center;
-  }
-  .topbar{
-    width:96%;               /* takes most of viewport width but stays centered */
-    max-width:760px;         /* controls max expansion on wide screens */
-    height:64px;
-    background:#333;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:16px;      /* more rounded, pill-like */
-    box-shadow:0 8px 24px rgba(0,0,0,0.14);
-    position:relative;
-  }
-  .handle{
-    position:absolute; top:10px; left:50%; transform:translateX(-50%); width:70px; height:6px; border-radius:4px; background:#d6d6d6;
-  }
+/* CARD — MADE WIDER */
+.card{
+  width:98%;                    /* ALMOST FULL WIDTH */
+  max-width:var(--card-max);    /* WIDER THAN BEFORE */
+  background:#fff;
+  margin-top:12px;
+  border-radius:var(--card-radius);
+  box-shadow:0 6px 22px rgba(0,0,0,0.12);
+  position:relative;
+}
 
-  /* card: slightly wider max width than before */
-  .card{
-    width:94%;
-    max-width:var(--card-max);
-    background:#fff;
-    border-radius:var(--card-radius);
-    box-shadow:0 10px 30px var(--shadow);
-    position:relative;
-    overflow:visible;
-  }
+/* TIMER */
+.timer-box{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  background:#bfbfbf;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:20px;
+}
 
-  /* timer squircle */
-  .timer-box{
-    position:absolute;
-    top:14px;
-    right:14px;
-    width:56px;height:56px;border-radius:14px;
-    background: linear-gradient(180deg,#f4f4f4 0%, #e0e0e0 100%);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:20px;color:#333;
-    box-shadow: inset 0 4px 8px rgba(255,255,255,0.65), inset 0 -3px 6px rgba(0,0,0,0.06), 0 8px 18px rgba(0,0,0,0.08);
-    z-index:5;
-  }
+/* CONTENT */
+.content{padding:18px;}
 
-  .content{padding:16px 18px 18px 18px;}
-  .profile-row{display:flex;gap:12px;align-items:flex-start}
-  .avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#0b8f6b,#0b7a5f);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:34px;border:6px solid rgba(255,255,255,0.75);box-shadow:0 8px 22px rgba(0,0,0,0.16);flex-shrink:0}
+.profile{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
 
-  .title-col{flex:1}
-  .meal-title{font-size:30px;font-weight:900;margin:8px 0 4px 0;letter-spacing:-0.4px;text-shadow:0 1px 0 rgba(0,0,0,0.22)}
-  .id{font-weight:800;font-size:18px;margin:2px 0;text-shadow:0 1px 0 rgba(0,0,0,0.18)}
-  .line{font-size:16px;margin:2px 0;color:#222;text-shadow:0 1px 0 rgba(0,0,0,0.12)}
+.avatar{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0b8f6b,#0b7a5f);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  font-weight:800;
+}
 
-  /* course: width tuned to wrap similarly; with increased card width this will display full */
-  .course{
-    margin-top:10px;color:#222;font-size:15.5px;font-weight:600;line-height:1.30;
-    width:260px;               /* slightly larger for wider card */
-    word-break:break-word;white-space:normal;text-shadow:0 1px 0 rgba(0,0,0,0.12);
-  }
+.title-col{flex:1;}
+.meal{font-size:30px;font-weight:900;margin-top:16px;}
+.sid{font-size:18px;font-weight:800;}
+.line{font-size:17px;margin-top:3px;}
 
-  /* date + time row */
-  .dt-row{
-    display:flex;justify-content:flex-start;align-items:center;margin-top:14px;padding:0 6px;gap:20px;
-  }
-  .dt,.tm{font-size:18px;font-weight:700;color:#111;text-shadow:0 1px 0 rgba(0,0,0,0.12)}
+.course{
+  font-size:16px;
+  margin-top:14px;
+  font-weight:600;
+  line-height:1.35;
+}
 
-  .approved{text-align:center;margin-top:14px;font-size:28px;font-weight:900;color:var(--green);text-shadow:0 2px 0 rgba(0,0,0,0.04)}
-  .rate-btn{display:inline-block;margin:10px auto 0;padding:8px 12px;border-radius:12px;border:2px solid var(--brown);background:#fff;font-weight:800;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,0.04)}
+/* DATE TIME ROW */
+.dt-row{
+  display:flex;
+  gap:30px;
+  margin-top:16px;
+  font-size:18px;
+  font-weight:800;
+}
 
-  .bottom-brown{background:var(--brown);padding:16px;margin-top:14px;border-bottom-left-radius:var(--card-radius);border-bottom-right-radius:var(--card-radius)}
-  .inner-white{background:#fff;border-radius:10px;height:380px;box-shadow: inset 0 2px 0 rgba(0,0,0,0.02);border:8px solid transparent}
+.approved{
+  text-align:center;
+  font-size:28px;
+  margin-top:18px;
+  color:var(--green);
+  font-weight:900;
+}
 
-  @media (max-width:520px){
-    .topbar{width:96%}                 /* keep topbar wide on phones */
-    .card{width:96%}                   /* card uses more available width on small screens */
-    .course{width:220px}               /* adjust wrap on narrow screens */
-    .avatar{width:96px;height:96px;font-size:32px}
-    .timer-box{width:52px;height:52px;border-radius:12px;top:12px;right:12px;font-size:18px}
-    .inner-white{height:460px}
-  }
+.rate{
+  margin:12px auto;
+  width:max-content;
+  padding:8px 14px;
+  border-radius:12px;
+  border:2px solid var(--brown);
+  font-weight:800;
+}
 
-  @media (min-width:980px){
-    .topbar{width:80%;max-width:980px}
-    .card{max-width:540px}
-    .course{width:340px}
-    .inner-white{height:420px}
-  }
+.bottom{
+  margin-top:18px;
+  background:var(--brown);
+  padding:18px;
+  border-bottom-left-radius:14px;
+  border-bottom-right-radius:14px;
+}
 
-  body, html { -webkit-text-size-adjust:100%; }
+.inner-white{
+  background:#fff;
+  height:380px;
+  border-radius:10px;
+}
 </style>
 </head>
+
 <body>
 
-<div class="center-wrap">
-  <div class="inner">
+<!-- FULL WIDTH TOPBAR -->
+<div class="topbar-wrap">
+  <div class="topbar">
+    <div class="handle"></div>
+    Mess Pass
+  </div>
+</div>
 
-    <!-- topbar wrap - pill like and wider than card -->
-    <div class="topbar-wrap">
-      <div class="topbar">
-        <div class="handle"></div>
-        Mess Pass
-      </div>
-    </div>
+<div class="center">
+  <div class="card">
 
-    <!-- card -->
-    <div class="card">
-      <div class="timer-box" id="timer">30</div>
+    <div class="timer-box" id="timer">30</div>
 
-      <div class="content">
-        <div class="profile-row">
-          <div class="avatar" id="avatarInitials">CS</div>
-          <div class="title-col">
-            <div class="meal-title">Dinner</div>
-            <div class="id">12311129</div>
-            <div class="line">Cheruku Sai Kumar</div>
-            <div class="line">Mess-Centre-02</div>
-          </div>
-        </div>
+    <div class="content">
 
-        <div class="course">P132: B.Tech. (Computer Science and<br>Engineering) (2023)</div>
-
-        <div class="dt-row">
-          <div class="dt" id="dateText">Nov 19, 2025</div>
-          <div class="tm" id="timeText">04:08 PM</div>
-        </div>
-
-        <div class="approved">Meal Approved</div>
-
-        <div style="text-align:center;">
-          <div class="rate-btn" id="rateBtn">⭐&nbsp;RATE US</div>
-        </div>
-
-        <div class="bottom-brown">
-          <div class="inner-white"></div>
+      <div class="profile">
+        <div class="avatar" id="initials">CS</div>
+        <div class="title-col">
+          <div class="meal">Dinner</div>
+          <div class="sid">12311129</div>
+          <div class="line">Cheruku Sai Kumar</div>
+          <div class="line">Mess-Centre-02</div>
         </div>
       </div>
+
+      <div class="course">
+        P132: B.Tech. (Computer Science and Engineering)(2023)
+      </div>
+
+      <div class="dt-row">
+        <div id="date">Nov 19, 2025</div>
+        <div id="time">04:08 PM</div>
+      </div>
+
+      <div class="approved">Meal Approved</div>
+
+      <div class="rate">⭐ RATE US</div>
+
+      <div class="bottom">
+        <div class="inner-white"></div>
+      </div>
+
     </div>
 
   </div>
@@ -189,39 +210,37 @@
 /* initials */
 (function(){
   const n = "Cheruku Sai Kumar".split(" ");
-  document.getElementById('avatarInitials').textContent = (n[0][0] + (n[1] ? n[1][0] : '')).toUpperCase();
+  document.getElementById("initials").textContent = (n[0][0] + n[1][0]).toUpperCase();
 })();
 
-/* countdown 30->1 */
+/* countdown */
 (function(){
-  const el = document.getElementById('timer');
-  let s = 30;
-  el.textContent = s;
+  let t = 30;
+  const box = document.getElementById("timer");
   const id = setInterval(()=>{
-    s--;
-    if(s < 1){ el.textContent = 1; clearInterval(id); return; }
-    el.textContent = s;
-  }, 1000);
+    t--;
+    if(t < 1){ t = 1; clearInterval(id); }
+    box.textContent = t;
+  },1000);
 })();
 
-/* live date/time */
-function pad(n){ return n<10 ? '0'+n : n; }
-function updateDT(){
+/* dynamic date & time */
+function pad(n){ return n<10?"0"+n:n; }
+function upd(){
   const now = new Date();
-  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  document.getElementById('dateText').textContent = `${months[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
-  let h = now.getHours(), m = pad(now.getMinutes());
-  const ap = h>=12 ? 'PM' : 'AM';
-  h = h%12 || 12;
-  document.getElementById('timeText').textContent = `${pad(h)}:${m} ${ap}`;
-}
-updateDT(); setInterval(updateDT,1000);
+  const m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-/* rate button (stars hidden until click) */
-(function(){
-  const rateBtn = document.getElementById('rateBtn');
-  rateBtn.onclick = ()=>{ alert('Rate dialog placeholder — click stars not implemented in this trimmed demo.'); };
-})();
+  document.getElementById("date").textContent =
+    `${m[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
+
+  let h = now.getHours();
+  let ap = h>=12?"PM":"AM";
+  h = h%12 || 12;
+
+  document.getElementById("time").textContent = `${h}:${pad(now.getMinutes())} ${ap}`;
+}
+upd();
+setInterval(upd,1000);
 </script>
 </body>
 </html>
