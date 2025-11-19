@@ -18,11 +18,10 @@
     margin:0;
     font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background:#efefef;
-    -webkit-font-smoothing:antialiased;
     color:var(--text);
   }
 
-  /* full width top bar */
+  /* Full width top bar */
   .topbar{
     width:100%;
     height:70px;
@@ -36,14 +35,14 @@
     z-index:30;
   }
   .topbar .handle{
-    width:70px;height:6px;border-radius:4px;background:#d6d6d6;position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:70px;height:6px;border-radius:4px;background:#d6d6d6;
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
   }
   .topbar span{font-size:20px;font-weight:600}
 
-  /* center container */
   .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
 
-  /* card */
+  /* Main Card */
   .card{
     width:94%;
     max-width:var(--card-max);
@@ -51,10 +50,9 @@
     border-radius:var(--card-radius);
     box-shadow:0 12px 28px rgba(0,0,0,0.12);
     position:relative;
-    overflow:visible;
   }
 
-  /* timer small rounded-square */
+  /* Timer Box */
   .timer{
     position:absolute;
     top:18px;
@@ -63,107 +61,106 @@
     height:50px;
     padding:0 10px;
     border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     background:linear-gradient(180deg,#e9e9e9,#cfcfcf);
-    font-weight:700;
-    font-size:20px;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
-    z-index:6;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:700;
+    box-shadow:0 8px 18px rgba(0,0,0,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
   }
 
-  .content{padding:18px 18px 8px 18px;}
-  .profile-row{display:flex;gap:16px;align-items:flex-start;padding-top:8px}
+  .content{padding:18px 18px;}
 
-  /* avatar: shows image if available else initials */
+  .profile-row{display:flex;gap:16px;align-items:flex-start;margin-top:10px;}
+
   .avatar{
     width:104px;height:104px;border-radius:50%;
     background:linear-gradient(135deg,#0b8f63,#0b7a5f);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:34px;
+    color:white;font-size:34px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
     box-shadow:0 12px 26px rgba(0,0,0,0.18);
-    flex-shrink:0;
-    overflow:hidden;
   }
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
-  .title-col{flex:1}
-  /* MEAL TITLE lowered to align below timer bottom */
+  .title-col{flex:1;}
+
+  /* Dinner */
   .meal-title{
     font-size:34px;
     font-weight:900;
-    margin-top:26px;     /* increased so Dinner starts lower */
-    margin-bottom:16px;  /* more room before id/name */
-    text-shadow:0 1px 0 rgba(0,0,0,0.06);
+    margin-top:26px;
+    margin-bottom:16px;
   }
 
-  /* Number / Name / Mess center - same style exactly */
+  /* Number / Name / Mess Centre — reduced spacing */
   .sid, .line {
-    font-size: 20px;
-    font-weight: 600;
-    color: #111;
-    margin-bottom: 6px;
-    line-height: 1.35;
+    font-size:20px;
+    font-weight:600;
+    color:#111;
+    margin-bottom:2px;     /* reduced from 6px → tighter */
+    line-height:1.28;
   }
 
-  /* course code: more breathing room top & bottom */
+  /* COURSE CODE — more spacing top + bottom */
   .course{
     font-size:18px;
     font-weight:600;
-    margin-top:18px;     /* increased */
-    margin-bottom:26px;  /* increased */
+    margin-top:22px;      /* more space above */
+    margin-bottom:32px;   /* more space below */
     line-height:1.45;
     color:#222;
-    padding-right:8px;
   }
 
-  /* date/time row: more spacing above & below */
+  /* DATE + TIME — more spacing */
   .dt-row{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    margin-top:12px;       /* increased */
-    margin-bottom:22px;    /* increased */
+    margin-top:12px;
+    margin-bottom:30px;   /* increased */
     padding:0 6px;
   }
-  .dt-row .date, .dt-row .time{font-size:18px;font-weight:700}
+  .dt-row .date,.dt-row .time{
+    font-size:18px;
+    font-weight:700;
+  }
 
-  /* meal approved - tightened but with nicer gap */
+  /* Meal Approved */
   .approved{
+    text-align:center;
     font-size:28px;
     font-weight:900;
     color:var(--green);
-    text-align:center;
-    margin-top:16px;     /* more space above */
-    margin-bottom:10px;  /* more space below */
-    text-shadow:0 1px 0 rgba(0,0,0,0.03);
+    margin-bottom:12px;
   }
 
-  /* rate button area - reduce gap to brown box */
+  /* Rate Button */
   .rate-wrap{
     text-align:center;
-    margin-bottom:6px;  /* tightened */
+    margin-bottom:8px;
   }
-  .rate-btn{display:inline-block;padding:8px 16px;border-radius:10px;border:2px solid var(--brown);font-weight:800;background:#fff}
+  .rate-btn{
+    padding:8px 18px;
+    border-radius:10px;
+    border:2px solid var(--brown);
+    background:#fff;
+    font-weight:800;
+  }
 
-  /* brown box sits closer to rate us & reduced inner height to match */
+  /* Brown box — FULL WIDTH again */
   .brown-box{
+    width:100%;           /* FIXED: full width restored */
     background:var(--brown);
-    padding:14px;             /* reduced */
+    padding:16px;
     border-bottom-left-radius:var(--card-radius);
     border-bottom-right-radius:var(--card-radius);
-    margin-top:4px;           /* brings it closer */
+    margin-top:4px;
   }
-  .brown-inner{background:#fff;border-radius:10px;height:300px;border:10px solid transparent}
 
-  /* responsive tweaks */
-  @media (max-width:420px){
-    .card{width:96%}
-    .avatar{width:92px;height:92px}
-    .meal-title{font-size:32px}
-    .timer{min-width:48px;height:48px;border-radius:12px;font-size:18px;top:14px;right:12px}
-    .brown-inner{height:280px}
+  .brown-inner{
+    background:#fff;
+    border-radius:10px;
+    height:300px;
+    border:10px solid transparent;
+    width:100%;
   }
+
 </style>
 </head>
 <body>
@@ -174,17 +171,13 @@
   </div>
 
   <div class="wrap">
-    <article class="card" id="card">
+    <article class="card">
 
       <div class="timer" id="timerEl">30</div>
 
       <div class="content">
         <div class="profile-row">
-          <div class="avatar" id="avatar">
-            <!-- place avatar.jpg in same folder to use actual photo -->
-            <img id="avatarImg" src="avatar.jpg" alt="" onerror="this.style.display='none'">
-            <span id="avatarInitials">CS</span>
-          </div>
+          <div class="avatar" id="avatarInitials">CS</div>
 
           <div class="title-col">
             <div class="meal-title">Dinner</div>
@@ -194,7 +187,9 @@
           </div>
         </div>
 
-        <div class="course">P132: B.Tech. (Computer Science and Engineering)(2023)</div>
+        <div class="course">
+          P132: B.Tech. (Computer Science and Engineering)(2023)
+        </div>
 
         <div class="dt-row">
           <div class="date" id="dateText">Nov 20, 2025</div>
@@ -210,57 +205,43 @@
       </div>
 
       <div class="brown-box">
-        <div class="brown-inner" id="brownInner">
-          <!-- optional accepted image or animation can be inserted here -->
-        </div>
+        <div class="brown-inner"></div>
       </div>
 
     </article>
   </div>
 
 <script>
-/* initials fallback if no avatar image file */
-(function(){
-  const avatarImg = document.getElementById('avatarImg');
-  const initialsEl = document.getElementById('avatarInitials');
-  avatarImg.addEventListener('error', ()=> { avatarImg.style.display='none'; initialsEl.style.display='flex'; });
-  avatarImg.addEventListener('load', ()=> { initialsEl.style.display='none'; });
-  initialsEl.style.display = 'flex';
-})();
+/* Countdown 30 -> 1 */
+let sec = 30;
+const timerEl = document.getElementById("timerEl");
+timerEl.textContent = sec;
 
-/* countdown 30->1 */
-(function(){
-  const el = document.getElementById('timerEl');
-  let sec = 30;
-  el.textContent = sec;
-  const id = setInterval(()=>{
-    sec--;
-    // keep showing 1 at the end per your instruction (30 -> 1)
-    if(sec <= 1){
-      el.textContent = 1;
-      clearInterval(id);
-      return;
-    }
-    el.textContent = sec;
-  },1000);
-})();
-
-/* realtime date/time (keeps updating) */
-(function updateDT(){
-  const dEl = document.getElementById('dateText');
-  const tEl = document.getElementById('timeText');
-  function pad(n){ return n<10?'0'+n:n; }
-  function refresh(){
-    const now = new Date();
-    const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    dEl.textContent = `${months[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
-    let hh = now.getHours(), mm = pad(now.getMinutes()), ap = hh>=12?'PM':'AM';
-    hh = hh%12 || 12;
-    tEl.textContent = `${hh}:${mm} ${ap}`;
+let t = setInterval(()=>{
+  sec--;
+  if(sec <= 1){
+    timerEl.textContent = 1;
+    clearInterval(t);
+  } else {
+    timerEl.textContent = sec;
   }
-  refresh();
-  setInterval(refresh,1000);
-})();
+},1000);
+
+/* Live date/time */
+function pad(n){return n<10?"0"+n:n;}
+function updateDT(){
+  const now=new Date();
+  const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const d=document.getElementById("dateText");
+  const tm=document.getElementById("timeText");
+  d.textContent=`${m[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
+  let h=now.getHours(), mm=pad(now.getMinutes()), ap=h>=12?"PM":"AM";
+  h=h%12||12;
+  tm.textContent=`${h}:${mm} ${ap}`;
+}
+updateDT();
+setInterval(updateDT,1000);
 </script>
+
 </body>
 </html>
