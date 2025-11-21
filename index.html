@@ -135,23 +135,32 @@
   }
 
   /* DATE + TIME — more spacing */
-  .dt-row{
+ .dt-row{
     display:flex;
-    justify-content:space-start;
+    justify-content:flex-start;   /* FIX: was space-start (invalid) */
     margin-top:14px;
-    margin-bottom:44px;   /* increased */
+    margin-bottom:44px;
     padding:0 12px;
     text-shadow:0px 1px 2px rgba(0,0,0,0.4);
     position:relative;
-  }
-  .dt-row .date,.dt-row .time{
+    width:100%;
+}
+
+/* Date stays left */
+.dt-row .date{
     font-size:19px;
     font-weight:500;
-  }
-.time{
+    z-index:2;  /* ensures it never overlaps */
+}
+
+/* Time goes to middle */
+.dt-row .time{
+    font-size:19px;
+    font-weight:500;
     position:absolute;
     left:50%;
-    transform:translateX(-50%);  /* TIME goes to exact center */
+    transform:translateX(-50%);
+    white-space:nowrap;   /* IMPORTANT: prevents wrapping on mobile */
 }
 
   /* Meal Approved */
