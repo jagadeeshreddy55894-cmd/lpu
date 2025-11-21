@@ -19,6 +19,7 @@
     font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background:#f3f3f0;
     color:var(--text);
+    
   }
 
   /* Full width top bar */
@@ -41,17 +42,18 @@
   .topbar span{font-size:20px;font-weight:600}
 
   .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
-
-  /* Main Card */
-  .card{
+.card{
     width:94%;
     max-width:var(--card-max);
-    background:#ededed;
+    background:#f2f2f2;       /* less bright white */
     border-radius:var(--card-radius);
-    box-shadow:0 12px 28px rgba(0,0,0,0.12);
-    position:relative;
-  }
 
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.6),    /* base shadow */
+        0 8px 18px rgba(0,0,0,0.12);   /* soft spread */
+
+    position:relative;
+}
   /* Timer Box */
   .timer{
     position:absolute;
@@ -115,20 +117,20 @@
     font-weight:800;
     color:#000;
     margin-bottom:4px;   /* reduced (was 8px) */
-    line-height:1.1;    /* slightly tighter */
+    line-height:1.2;    /* slightly tighter */
     text-shadow:0px 1px 2px rgba(0,0,0,0.75);
 }
 
 
   /* COURSE CODE — more spacing top + bottom */
   .course{
-    font-size:16px;
+    font-size:18px;
     font-weight:600;
     margin-top:26px;      /* more space above */
     margin-bottom:36px;   /* more space below */
     line-height:1.5;
     color:#222;
-    text-shadow:0px 1px 2px rgba(0,0,0,0.5);
+    text-shadow:0px 1px 2px rgba(0,0,0,0.4);
   }
 
   /* DATE + TIME — more spacing */
@@ -138,21 +140,21 @@
     margin-top:14px;
     margin-bottom:38px;   /* increased */
     padding:0 12px;
-    text-shadow:0px 1px 2px rgba(0,0,0,0.5);
+    text-shadow:0px 1px 2px rgba(0,0,0,0.4);
   }
   .dt-row .date,.dt-row .time{
     font-size:20px;
-    font-weight:600;
+    font-weight:500;
   }
 
   /* Meal Approved */
   .approved{
     text-align:center;
     font-size:28px;
-    font-weight:500;
+    font-weight:600;
     color:#00FF00;
     margin-bottom:8px;
-    text-shadow:0px 1px 2px rgba(0,0,0,0.6);
+    text-shadow:0px 1px 2px rgba(0,0,0,0.4);
     
   }
 
@@ -186,6 +188,7 @@
     height:300px;
     border:10px solid transparent;
     width:100%;
+   
   }
 .avatar{
     width:140px;
