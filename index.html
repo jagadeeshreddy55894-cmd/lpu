@@ -186,11 +186,12 @@
   }
 
   .brown-inner{
-    background:#f3f3f0;
+    background:#FEFEFE;
     border-radius:10px;
-    height:300px;
     border:10px solid transparent;
     width:100%;
+    overflow:hidden;
+
    
   }
 .avatar{
@@ -256,7 +257,16 @@
       </div>
 
       <div class="brown-box">
-        <div class="brown-inner"></div>
+       <div class="brown-inner">
+  <video src="video.mp4" autoplay muted playsinline style="
+      width:80%;
+      height:80%;
+      object-fit:cover;
+      border-radius:10px;
+      margin-left:32px;
+  "></video>
+</div>
+
       </div>
 
     </article>
@@ -296,6 +306,5 @@ setInterval(updateDT,1000);
 
 </body>
 </html>
-
 
 
