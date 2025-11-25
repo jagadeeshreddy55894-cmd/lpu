@@ -19,7 +19,6 @@
     font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background:#f3f3f0;
     color:var(--text);
-    
   }
 
   /* Full width top bar */
@@ -41,19 +40,32 @@
   }
   .topbar span{font-size:17px;font-weight:400}
 
+  /* ❌ Close button on top-right */
+  .close-btn{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    background:transparent;
+    border:none;
+    color:#ffffff;
+    font-size:22px;
+    font-weight:400;
+    padding:4px 6px;
+  }
+
   .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
-.card{
+  .card{
     width:97%;
     max-width:var(--card-max);
     background:#f2f2f2;       /* less bright white */
     border-radius:var(--card-radius);
-
     box-shadow:
         0 3px 8px rgba(0,0,0,0.6),    /* base shadow */
         0 8px 18px rgba(0,0,0,0.12);   /* soft spread */
-
     position:relative;
-}
+  }
+
   /* Timer Box */
   .timer{
     position:absolute;
@@ -76,11 +88,10 @@
     display:flex;
     gap:12px;
     align-items:flex-start;
-    margin-top:18px;   /* moved down */
-}
+    margin-top:18px;
+  }
 
-
-.avatar{
+  .avatar{
     width:104px;
     height:104px;
     border-radius:50%;
@@ -93,44 +104,41 @@
     justify-content:center;
     border:1px solid #000;
     box-shadow:0 12px 26px rgba(0,0,0,0.18);
-    margin-top:0px;     /* 👈 add this */
+    margin-top:0px;
     margin-left:-12px;
     margin-right:-5px;
-}
-
+  }
 
   .title-col{flex:1;}
 
-.meal-title{
+  .meal-title{
     font-size:30px;
-    font-weight:500;          /* reduced thickness */
+    font-weight:500;
     color:#000;
     margin-top:1px;
     margin-bottom:6px;
     margin-left:1px;
     line-height:1.8;
-    letter-spacing:-0.9px;    /* NEW — tighter letters */
+    letter-spacing:-0.9px;
     text-shadow:0px 1px 2px rgba(0,0,0,0.9);
-}
+  }
 
-
-.sid, .line {
+  .sid, .line {
     font-size:16px;
     font-weight:600;
     color:#000;
-    margin-bottom:4px;   /* reduced (was 8px) */
+    margin-bottom:4px;
     margin-left:3px;
-    line-height:1.4;    /* slightly tighter */
+    line-height:1.4;
     text-shadow:0px 1px 2px rgba(0,0,0,0.9);
-}
-
+  }
 
   /* COURSE CODE — more spacing top + bottom */
   .course{
     font-size:16px;
     font-weight:400;
-    margin-top:24px;      /* more space above */
-    margin-bottom:38px;   /* more space below */
+    margin-top:24px;
+    margin-bottom:38px;
     margin-left:-3px;
     line-height:1.3;
     letter-spacing:0.2px; 
@@ -143,7 +151,7 @@
     display:flex;
     justify-content:space-between;
     margin-top:32px;
-    margin-bottom:42px;   /* increased */
+    margin-bottom:42px;
     padding:0 64px;
     margin-left:-58px;
     text-shadow:0px 1px 2px rgba(0,0,0,0.4);
@@ -158,10 +166,9 @@
     text-align:center;
     font-size:26px;
     font-weight:700;
-    color:#6FB543;
+    color:#008000;
     margin-bottom:8px;
     text-shadow:0px 1px 2px rgba(0,0,0,0.2);
-    
   }
 
   /* Rate Button */
@@ -176,12 +183,11 @@
     background:#f3f3f0;
     font-size:16px;
     font-weight:600;
-   
   }
 
   /* Brown box — FULL WIDTH again */
   .brown-box{
-    width:100%;           /* FIXED: full width restored */
+    width:100%;
     background:var(--brown);
     padding:22px;
     border-bottom-left-radius:var(--card-radius);
@@ -196,22 +202,35 @@
     height:350px; 
     width:100%;
     overflow:hidden;
-
-   
   }
-.avatar{
+
+  .avatar{
     width:145px;
     height:148px;
     border-radius:50%;
     overflow:hidden;
     box-shadow:0 12px 26px rgba(0,0,0,0.18);
-}
+  }
 
-.avatar-img{
+  .avatar-img{
     width:100%;
     height:100%;
     object-fit:cover;
     object-position: center 10%;
+  }
+.close-btn{
+    position:absolute;
+    right:12px;
+    top:32px;
+    background:transparent;
+    border:none;
+    font-size:16px;
+    color:#f0f0f0;     /* softer grey, not bright white */
+    font-weight:800;   /* thinner look */
+    cursor:pointer;
+}
+.close-btn:active{
+    transform:scale(0.92);
 }
 
 
@@ -219,10 +238,14 @@
 </head>
 <body>
 
-  <div class="topbar">
+<div class="topbar">
     <div class="handle"></div>
     <span>Mess Pass</span>
-  </div>
+
+    <!-- Close button right side -->
+    <button class="close-btn" onclick="history.back()">✕</button>
+</div>
+
 
   <div class="wrap">
     <article class="card">
@@ -231,13 +254,12 @@
 
       <div class="content">
         <div class="profile-row">
-         <div class="avatar">
-  <img src="profile.jpg" class="avatar-img">
-</div>
-
+          <div class="avatar">
+            <img src="profile.jpg" class="avatar-img">
+          </div>
 
           <div class="title-col">
-            <div class="meal-title" id="mealTitle"></div>
+            <div class="meal-title">Dinner</div>
             <div class="sid">12311129</div>
             <div class="line">Cheruku Sai Kumar</div>
             <div class="line">Mess-Centre-02</div>
@@ -262,17 +284,16 @@
       </div>
 
       <div class="brown-box">
-       <div class="brown-inner">
-  <video src="video.mp4" autoplay muted playsinline style="
-      width:94%;
-      height:94%;
-      object-fit:contain;   /* shows full video without cutting */
-      display:block;
-      margin-left:14px;
-      margin-top:20px; 
-  "></video>
-</div>
-
+        <div class="brown-inner">
+          <video src="video.mp4" autoplay muted playsinline style="
+              width:94%;
+              height:94%;
+              object-fit:contain;
+              display:block;
+              margin-left:14px;
+              margin-top:20px; 
+          "></video>
+        </div>
       </div>
 
     </article>
@@ -308,22 +329,7 @@ function updateDT(){
 }
 updateDT();
 setInterval(updateDT,1000);
-function updateMeal() {
-  const now = new Date();
-  const hour = now.getHours();
-  let meal = "Dinner";
-
-  if (hour < 11) meal = "BreakFast";
-  else if (hour < 16) meal = "Lunch";
-
-  document.getElementById("mealTitle").textContent = meal;
-}
-
-updateMeal();
-
 </script>
 
 </body>
 </html>
-
-
