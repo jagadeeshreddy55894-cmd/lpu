@@ -334,7 +334,7 @@ function updateMeal() {
   const hour = now.getHours();
   let meal = "Dinner";
 
-  if (hour < 11) meal = "Breakfast";
+  if (hour < 11) meal = "BreakFast";
   else if (hour < 16) meal = "Lunch";
 
   document.getElementById("mealTitle").textContent = meal;
@@ -346,3 +346,4 @@ updateMeal();
 
 </body>
 </html>
+
