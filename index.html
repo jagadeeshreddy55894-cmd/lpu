@@ -232,9 +232,7 @@
 .close-btn:active{
     transform:scale(0.92);
 }
-.big-breakfast {
-  font-size: 2em;  /* Or whatever size you want */
-}
+
 
 </style>
 </head>
@@ -336,7 +334,7 @@ function updateMeal() {
   const hour = now.getHours();
   let meal = "Dinner";
 
-  if (hour < 11) meal = '<span class="big-breakfast">Breakfast</span>';
+  if (hour < 11) meal = "BreakFast";
   else if (hour < 16) meal = "Lunch";
 
   document.getElementById("mealTitle").textContent = meal;
