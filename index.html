@@ -334,7 +334,7 @@ function updateMeal() {
   const hour = now.getHours();
   let meal = "Dinner";
 
-  if (hour < 11) meal = "BreakFast";
+  if (hour < 11) meal = '<span style="font-size: 2em;">Breakfast</span>';
   else if (hour < 16) meal = "Lunch";
 
   document.getElementById("mealTitle").textContent = meal;
