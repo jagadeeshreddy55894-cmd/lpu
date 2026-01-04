@@ -1,1301 +1,368 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mess Coupon</title>
-
-    <style>
-        :root {
-            --card-max: 500px;
-            --card-radius: 18px;
-            --green: #26a42b;
-            --brown: #7a2d1e;
-            --text: #111;
-        }
-
-        /* ===== RESET & BASE ===== */
-        * {
-            box-sizing: border-box;
-            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background: #f3f3f0;
-            color: var(--text);
-            /* Prevent pull-to-refresh on mobile */
-            overscroll-behavior-y: none;
-        }
-
-        /* ===== LAYOUT & UTILS ===== */
-        .wrap {
-            display: flex;
-            justify-content: center;
-            padding: 18px 8px 40px;
-        }
-
-        /* ===== SHEET SYSTEM ===== */
-        .sheet-container {
-            position: fixed;
-            inset: 0;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .sheet {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            transition: transform 0.25s ease;
-        }
-
-        /* Top Sheet (Mess Pass) - sits on top (z=2) */
-        .sheet-top {
-            z-index: 2;
-            transform: translateY(100vh);
-            /* Start hidden to show Bottom Sheet first */
-            /* Adds a subtle shadow so it looks like it's over the bottom sheet */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Bottom Sheet (Mess Coupon/History) - sits behind (z=1) */
-        .sheet-bottom {
-            z-index: 1;
-            /* Initially visible at 0, covered by top sheet */
-            transform: translateY(0);
-            background: #ffffff;
-        }
-
-        /* ===== SHEET HEADER (Top Sheet) ===== */
-        .sheet-header {
-            width: 100%;
-            height: 68px;
-            background: #333;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            cursor: grab;
-            user-select: none;
-            /* Prevent text selection while dragging */
-        }
-
-        .sheet-header:active {
-            cursor: grabbing;
-        }
-
-        .sheet-header .handle {
-            width: 44px;
-            height: 6px;
-            border-radius: 4px;
-            background: #d6d6d6;
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .sheet-header span {
-            font-size: 17px;
-            font-weight: 400;
-        }
-
-        .sheet-header .close-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 400;
-            padding: 4px 6px;
-            cursor: pointer;
-        }
-
-        /* ===== TOPBAR (Inner Navigation) ===== */
-        .topbar {
-            height: 64px;
-            background: #2f2f2f;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .topbar .back {
-            position: absolute;
-            left: 12px;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 8px;
-            /* Bigger touch target */
-        }
-
-        .topbar .right {
-            position: absolute;
-            right: 12px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .topbar h1 {
-            font-size: 18px;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* ===== CARDS ===== */
-        .card {
-            background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            max-width: 820px;
-            margin: 14px auto;
-        }
-
-        .card.ticket-card {
-            width: 97%;
-            max-width: var(--card-max);
-            background: #f2f2f2;
-            border-radius: var(--card-radius);
-            box-shadow:
-                0 3px 8px rgba(0, 0, 0, 0.6),
-                0 8px 18px rgba(0, 0, 0, 0.12);
-            position: relative;
-            margin: 0;
-        }
-
-        /* ===== TICKET CARD CONTENTS ===== */
-        .timer {
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            min-width: 45px;
-            height: 40px;
-            padding: 0 10px;
-            border-radius: 18px;
-            background: #999;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 400;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12), inset 0 2px 6px rgba(255, 255, 255, 0.6);
-        }
-
-        .ticket-content {
-            padding: 18px 18px;
-        }
-
-        .profile-row {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            margin-top: 18px;
-        }
-
-        .avatar {
-            width: 104px;
-            height: 104px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #0b8f63, #0b7a5f);
-            color: white;
-            font-size: 34px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #000;
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
-            margin-left: -12px;
-            margin-right: -5px;
-            overflow: hidden;
-        }
-
-        .avatar img.avatar-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 10%;
-        }
-
-        .title-col {
-            flex: 1;
-        }
-
-        .meal-title {
-            font-size: 30px;
-            font-weight: 500;
-            color: #000;
-            margin: 1px 0 6px 1px;
-            line-height: 1.8;
-            letter-spacing: -0.9px;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.9);
-        }
-
-        .sid,
-        .line {
-            font-size: 16px;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 4px;
-            margin-left: 3px;
-            line-height: 1.4;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.9);
-        }
-
-        .course {
-            font-size: 16px;
-            font-weight: 400;
-            margin-top: 24px;
-            margin-bottom: 38px;
-            margin-left: -3px;
-            line-height: 1.3;
-            letter-spacing: 0.2px;
-            color: #222;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .dt-row {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 32px;
-            margin-bottom: 42px;
-            padding: 0 64px;
-            margin-left: -58px;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
-        }
-
-        .dt-row .date,
-        .dt-row .time {
-            font-size: 19px;
-            font-weight: 500;
-        }
-
-        .approved {
-            text-align: center;
-            font-size: 26px;
-            font-weight: 700;
-            color: #6FB543;
-            margin-bottom: 8px;
-            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .rate-wrap {
-            text-align: center;
-        }
-
-        .rate-btn {
-            padding: 4px 6px;
-            border-radius: 10px;
-            border: 2px solid var(--brown);
-            background: #f3f3f0;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Brown box Area */
-        .brown-box {
-            width: 100%;
-            background: #600000;
-            padding: 22px;
-            border-bottom-left-radius: var(--card-radius);
-            border-bottom-right-radius: var(--card-radius);
-        }
-
-        .brown-inner {
-            background: #FEFEFE;
-            border-radius: 10px;
-            border: 10px solid transparent;
-            height: 350px;
-            width: 100%;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brown-inner video {
-            width: 94%;
-            height: 94%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* ===== HISTORY CARD STYLES (Bottom Sheet) ===== */
-        .history-header {
-            background: linear-gradient(90deg, #ff8a7a, #ffd27a);
-            padding: 22px;
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-        }
-
-        .history-profile {
-            width: 90px;
-            text-align: center;
-        }
-
-        .history-profile img {
-            width: 86px;
-            height: 86px;
-            border-radius: 6px;
-            object-fit: cover;
-            background: #fff;
-        }
-
-        .history-profile .name {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #000;
-        }
-
-        .history-info {
-            flex: 1;
-            color: #111;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .history-info b {
-            font-weight: 600;
-        }
-
-        .history-content {
-            padding: 26px 20px 30px;
-            text-align: center;
-        }
-
-        .hint {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 14px;
-            color: #111;
-        }
-
-        .rate {
-            display: inline-block;
-            padding: 4px 10px;
-            border: 2px solid #7a2d1e;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            background: #fff;
-            margin-bottom: 26px;
-        }
-
-        .btn-row {
-            display: flex;
-            gap: 18px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            min-width: 220px;
-            padding: 14px 0;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            background: linear-gradient(90deg, #ff8a7a, #ffd27a);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-        }
-
-        /* ===== FEEDBACK SHEET STYLE ===== */
-        .sheet-feedback {
-            z-index: 300;
-            /* Higher than top sheet */
-            transform: translateY(100vh);
-            /* Start hidden at bottom */
-            background: #f3f3f0;
-            overflow-y: auto;
-            overscroll-behavior-y: contain;
-            /* Prevent body scroll chain */
-            touch-action: pan-y;
-            /* Optimize touch */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            /* Match sheet-top shadow */
-
-            /* Start state: Hidden and moved down */
-            transform: translateY(100vh);
-            visibility: hidden;
-            /* Transition transform immediately, delay visibility hide until transform finishes */
-            transition: transform 0.25s ease, visibility 0s 0.25s;
-        }
-
-        .sheet-feedback.active {
-            transform: translateY(0);
-            visibility: visible;
-            /* Transition transform immediately, show visibility immediately */
-            transition: transform 0.25s ease, visibility 0s 0s;
-        }
-
-        .feedback-card-content {
-            height: auto;
-            min-height: calc(100vh - 80px);
-            /* Adjust for topbar */
-            padding-bottom: 40px;
-        }
-
-        /* ===== MEAL HISTORY SHEET STYLE ===== */
-        .sheet-history {
-            position: fixed;
-            inset: 0;
-            z-index: 600;
-            /* Higher than everything */
-            background: #fff;
-            transform: translateX(100%);
-            /* Start hidden to the right */
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sheet-history.active {
-            transform: translateX(0);
-        }
-
-        .history-page-header {
-            background: #222;
-            /* Dark header */
-            color: #fff;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Center Content */
-            padding: 0 16px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-            position: relative;
-            /* For absolute positioning of button */
-        }
-
-        .history-back-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            /* margin-right: 16px; Removed margin */
-            cursor: pointer;
-            padding: 8px;
-            /* Touch target */
-            position: absolute;
-            left: 8px;
-        }
-
-        .history-title {
-            font-size: 20px;
-            font-weight: 500;
-        }
-
-        .history-page-content {
-            flex: 1;
-            background: #fff;
-            overflow-y: auto;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .fb-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            margin-top: 10px;
-        }
-
-        .fb-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 24px;
-            font-size: 15px;
-        }
-
-        /* Stars */
-        .stars-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .star {
-            font-size: 36px;
-            color: #FFC107;
-            /* Make all stars yellow */
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        /* Empty star specific styling if needed, but color handles outline character */
-
-        .star.select-star,
-        .star.hover-star {
-            /* Solid star character is already yellow by color above */
-            transform: scale(1.1);
-        }
-
-        /* Meal Type Tabs */
-        .meal-type-label {
-            margin-bottom: 12px;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .meal-tabs {
-            display: flex;
-            gap: 10px;
-            justify-content: space-between;
-            margin-bottom: 28px;
-        }
-
-        .meal-tab {
-            flex: 1;
-            padding: 12px 4px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #fff;
-            cursor: pointer;
-            font-weight: 600;
-            text-align: center;
-            font-size: 14px;
-            color: #555;
-            transition: all 0.2s;
-        }
-
-        .meal-tab.active-tab {
-            border: 2px solid #FF8C00;
-            /* Orange Border */
-            background: #FFE4E1;
-            /* Light Orange/Pink Background */
-            color: #000;
-            box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
-            /* Glow */
-            font-weight: 700;
-        }
-
-        /* Feedback Sections */
-        .feedback-section {
-            margin-bottom: 28px;
-            background: #fff;
-            padding: 16px;
-            border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .fs-title {
-            font-size: 16px;
-            font-weight: 700;
-            text-decoration: underline;
-            text-align: center;
-            margin-bottom: 12px;
-            color: #000;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .fs-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f9f9f9;
-        }
-
-        .fs-row:last-child {
-            border-bottom: none;
-        }
-
-        .fs-label {
-            font-size: 15px;
-            color: #333;
-        }
-
-        /* Checkbox Styling */
-        .custom-check {
-            width: 22px;
-            height: 22px;
-            border: 2px solid #aaa;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .custom-check.checked {
-            background: #FF8C00;
-            /* Orange */
-            border-color: #FF8C00;
-        }
-
-        .custom-check.checked::after {
-            content: '✓';
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        /* Remarks */
-        .remarks-label {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: block;
-            margin-top: 10px;
-        }
-
-        .remarks-input {
-            width: 100%;
-            height: 54px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 16px;
-            margin-bottom: 30px;
-            font-family: inherit;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, #ff8a7a, #ffd27a);
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #000;
-            cursor: pointer;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Remove Old Modal Styles if present */
-        .modal-overlay {
-            display: none !important;
-        }
-
-        /* ===== CUSTOM ALERT MODAL ===== */
-        .custom-alert-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 500;
-            /* Highest priority */
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .custom-alert-overlay.active {
-            display: flex;
-        }
-
-        .custom-alert-box {
-            background: #fff;
-            width: 80%;
-            max-width: 320px;
-            border-radius: 16px;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            animation: alertPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes alertPop {
-            from {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .custom-alert-title {
-            font-size: 19px;
-            font-weight: 700;
-            margin-top: 24px;
-            margin-bottom: 8px;
-            color: #000;
-        }
-
-        .custom-alert-msg {
-            font-size: 15px;
-            color: #333;
-            padding: 0 24px 24px;
-            line-height: 1.4;
-        }
-
-        .custom-alert-btn {
-            border-top: 1px solid #eee;
-            padding: 14px;
-            font-size: 17px;
-            font-weight: 700;
-            color: #FF8C00;
-            /* Orange text */
-            cursor: pointer;
-            background: #fff;
-            width: 100%;
-            border-radius: 0;
-            border-left: none;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .custom-alert-btn:active {
-            background: #f9f9f9;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mess Pass</title>
+<style>
+  :root{
+    --card-max:500px;
+    --card-radius:18px;
+    --green: #26a42b;
+    --brown: #7a2d1e;
+    --text:#111;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:f3f3f0;
+    color:var(--text);
+  }
+
+  /* Full width top bar */
+  .topbar{
+    width:100%;
+    height:68px;
+    background:#333;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:sticky;
+    top:0;
+    z-index:30;
+  }
+  .topbar .handle{
+    width:44px;height:6px;border-radius:4px;background:#d6d6d6;
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  }
+  .topbar span{font-size:17px;font-weight:400}
+
+  /* ❌ Close button on top-right */
+  .close-btn{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    background:transparent;
+    border:none;
+    color:#ffffff;
+    font-size:22px;
+    font-weight:400;
+    padding:4px 6px;
+  }
+
+  .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
+  .card{
+    width:97%;
+    max-width:var(--card-max);
+    background:#f2f2f2;       /* less bright white */
+    border-radius:var(--card-radius);
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.6),    /* base shadow */
+        0 8px 18px rgba(0,0,0,0.12);   /* soft spread */
+    position:relative;
+  }
+
+  /* Timer Box */
+  .timer{
+    position:absolute;
+    top:4px;
+    right:8px;
+    min-width:45px;
+    height:40px;
+    padding:0 10px;
+    border-radius:18px;
+    background:#999;   /* dark grey */
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:400;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow:0 8px 18px rgba(0,0,0,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
+  }
+
+  .content{padding:18px 18px;}
+
+  .profile-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    margin-top:18px;
+  }
+
+  .avatar{
+    width:104px;
+    height:104px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#0b8f63,#0b7a5f);
+    color:white;
+    font-size:34px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #000;
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+    margin-top:0px;
+    margin-left:-12px;
+    margin-right:-5px;
+  }
+
+  .title-col{flex:1;}
+
+  .meal-title{
+    font-size:30px;
+    font-weight:500;
+    color:#000;
+    margin-top:1px;
+    margin-bottom:6px;
+    margin-left:1px;
+    line-height:1.8;
+    letter-spacing:-0.9px;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.9);
+  }
+
+  .sid, .line {
+    font-size:16px;
+    font-weight:600;
+    color:#000;
+    margin-bottom:4px;
+    margin-left:3px;
+    line-height:1.4;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.9);
+  }
+
+  /* COURSE CODE — more spacing top + bottom */
+  .course{
+    font-size:16px;
+    font-weight:400;
+    margin-top:24px;
+    margin-bottom:38px;
+    margin-left:-3px;
+    line-height:1.3;
+    letter-spacing:0.2px; 
+    color:#222;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.3);
+  }
+
+  /* DATE + TIME — more spacing */
+  .dt-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:32px;
+    margin-bottom:42px;
+    padding:0 64px;
+    margin-left:-58px;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.4);
+  }
+  .dt-row .date,.dt-row .time{
+    font-size:19px;
+    font-weight:500;
+  }
+
+  /* Meal Approved */
+  .approved{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:#6FB543;
+    margin-bottom:8px;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.2);
+  }
+
+  /* Rate Button */
+  .rate-wrap{
+    text-align:center;
+    margin-bottom:0px;
+  }
+  .rate-btn{
+    padding:4px 6px;
+    border-radius:10px;
+    border:2px solid var(--brown);
+    background:#f3f3f0;
+    font-size:16px;
+    font-weight:600;
+  }
+
+  /* Brown box — FULL WIDTH again blue*/
+  .brown-box{
+    width:100%;
+    background:#004000;
+    padding:22px;
+    border-bottom-left-radius:var(--card-radius);
+    border-bottom-right-radius:var(--card-radius);
+    margin-top:-12px;
+  }
+
+  .brown-inner{
+    background:#FEFEFE;
+    border-radius:10px;
+    border:10px solid transparent;
+    height:350px; 
+    width:100%;
+    overflow:hidden;
+  }
+
+  .avatar{
+    width:145px;
+    height:148px;
+    border-radius:50%;
+    overflow:hidden;
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+  }
+
+  .avatar-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position: center 10%;
+  }
+.close-btn{
+    position:absolute;
+    right:12px;
+    top:32px;
+    background:transparent;
+    border:none;
+    font-size:16px;
+    color:#f0f0f0;     /* softer grey, not bright white */
+    font-weight:800;   /* thinner look */
+    cursor:pointer;
+}
+.close-btn:active{
+    transform:scale(0.92);
+}
+
+
+</style>
 </head>
-
 <body>
 
-    <div class="sheet-container">
-        <!-- BOTTOM SHEET: HISTORY (Background) -->
-        <div class="sheet sheet-bottom" id="sheetBottom">
-            <div class="topbar">
-                <!-- Back Button restores the Top Sheet -->
-                <div class="back">←</div>
-                <h1>Mess Coupon</h1>
-                <div class="right" onclick="openHistory()" style="cursor: pointer;">Meal History</div>
-            </div>
+<div class="topbar">
+    <div class="handle"></div>
+    <span>Mess Pass</span>
 
-            <div class="card">
-                <div class="history-header">
-                    <div class="history-profile">
-                        <img src="profile.jpg" alt="Profile">
-                        <div class="name">Mallidi Gana Jagadeesh Reddy</div>
-                    </div>
+    <!-- Close button right side -->
+    <button class="close-btn" onclick="history.back()">✕</button>
+</div>
 
-                    <div class="history-info">
-                        <b>Father's Name</b><br>
-                        Mallidi Srinivasa Reddy (9912695631)<br><br>
 
-                        <b>Mother's Name</b><br>
-                        Mallidi Sridevi (-)<br><br>
+  <div class="wrap">
+    <article class="card">
 
-                        <b>Program Name</b><br>
-                        P132:B.Tech. (Computer Science and Engineering)(2023)<br><br>
+      <div class="timer" id="timerEl">30</div>
 
-                        <b>Hostel</b><br>
-                        Boys Hostel-04 - A108-Bed B (Std Non-AC 5 Seater)
-                    </div>
-                </div>
+      <div class="content">
+        <div class="profile-row">
+          <div class="avatar">
+            <img src="profile.jpg" class="avatar-img">
+          </div>
 
-                <div class="history-content">
-                    <div class="hint">Tap on the meal name to scan and avail food.</div>
-                    <button class="rate" onclick="openFeedback()">⭐ RATE US</button>
-                    <div class="btn-row">
-                        <button class="btn" onclick="restoreTicket()">BreakFast →</button>
-                        <button class="btn" onclick="restoreTicket()">Lunch →</button>
-                        <button class="btn" onclick="restoreTicket()">Dinner →</button>
-                    </div>
-                </div>
-            </div>
+          <div class="title-col">
+            <div class="meal-title" id="mealTitle"></div>
+            <div class="sid">12311286</div>
+            <div class="line">Jagan Mohan</div>
+            <div class="line">Mess-Centre-02</div>
+          </div>
         </div>
 
-        <!-- TOP SHEET: TICKET (Foreground) -->
-        <div class="sheet sheet-top" id="sheetTop">
-            <div class="sheet-header" id="dragHandle">
-                <div class="handle"></div>
-                <span>Mess Pass</span>
-                <!-- 'X' dismisses the ticket. Stop propagation to prevent drag start. -->
-                <button class="close-btn" onclick="dismissTicket()" onmousedown="event.stopPropagation()"
-                    ontouchstart="event.stopPropagation()">✕</button>
-            </div>
-            <div class="wrap">
-                <article class="card ticket-card">
-                    <div class="timer" id="timerEl">30</div>
-                    <div class="ticket-content">
-                        <div class="profile-row">
-                            <div class="avatar">
-                                <img src="profile.jpg" class="avatar-img" alt="User">
-                            </div>
-
-                            <div class="title-col">
-                                <div class="meal-title" id="mealTitle"></div>
-                                <div class="sid">12317202</div>
-                                <div class="line">Kollu Swamy Prasad</div>
-                                <div class="line">Mess-Centre-02</div>
-                            </div>
-                        </div>
-
-                        <div class="course">
-                            P132: B.Tech. (Computer Science and Engineering)(2023)
-                        </div>
-
-                        <div class="dt-row">
-                            <div class="date" id="dateText"></div>
-                            <div class="time" id="timeText"></div>
-                        </div>
-
-                        <div class="approved">Meal Approved</div>
-
-                        <div class="rate-wrap">
-                            <button class="rate-btn" onclick="openFeedback()">⭐ RATE US</button>
-                        </div>
-                    </div>
-
-                    <div class="brown-box">
-                        <div class="brown-inner">
-                            <video src="video.mp4" autoplay muted playsinline></video>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-
-    <!-- FEEDBACK SHEET (z-index 3) -->
-    <div class="sheet sheet-feedback" id="sheetFeedback">
-        <div class="sheet-header" id="feedbackDragHandle">
-            <div class="handle"></div>
-            <span>Feedback</span>
-            <!-- 'X' dismisses the ticket. Stop propagation to prevent drag start. -->
-            <button class="close-btn" type="button" onclick="closeFeedback()" onmousedown="event.stopPropagation()"
-                ontouchstart="event.stopPropagation()" style="padding: 12px; z-index: 50;">✕</button>
+        <div class="course">
+          P132: B.Tech. (Computer Science and Engineering)(2023)
         </div>
 
-        <div class="card feedback-card-content">
-            <div class="modal-body">
-                <div class="fb-title">Mess Feedback</div>
-                <div class="fb-subtitle">Tell us how we did!</div>
-
-                <!-- Stars -->
-                <div class="stars-container" id="starsContainer">
-                    <span class="star" data-rating="1">☆</span>
-                    <span class="star" data-rating="2">☆</span>
-                    <span class="star" data-rating="3">☆</span>
-                    <span class="star" data-rating="4">☆</span>
-                    <span class="star" data-rating="5">☆</span>
-                </div>
-
-                <div class="meal-type-label">Tap to select meal type</div>
-                <div class="meal-tabs" id="mealTabs">
-                    <div class="meal-tab" onclick="selectMealTab(this)">Breakfast</div>
-                    <div class="meal-tab" onclick="selectMealTab(this)">Lunch</div>
-                    <div class="meal-tab" onclick="selectMealTab(this)">Tea</div>
-                    <div class="meal-tab" onclick="selectMealTab(this)">Dinner</div>
-                </div>
-
-                <!-- Service/Staff -->
-                <div class="feedback-section">
-                    <div class="fs-title">Service/Staff</div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Food served late</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Staff not polite</div>
-                        <div class="custom-check"></div>
-                    </div>
-                </div>
-
-                <!-- Quantity -->
-                <div class="feedback-section">
-                    <div class="fs-title">Quantity</div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Refills not available</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Less food</div>
-                        <div class="custom-check"></div>
-                    </div>
-                </div>
-
-                <!-- Hygiene -->
-                <div class="feedback-section">
-                    <div class="fs-title">Hygiene</div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Staff not hygienic</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Utensils dirty</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Mess not clean</div>
-                        <div class="custom-check"></div>
-                    </div>
-                </div>
-
-                <!-- Food Quality -->
-                <div class="feedback-section">
-                    <div class="fs-title">Food Quality</div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Tasteless</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Not fresh</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Undercooked / overcooked</div>
-                        <div class="custom-check"></div>
-                    </div>
-                    <div class="fs-row" onclick="toggleCheck(this)">
-                        <div class="fs-label">Too oily/greasy</div>
-                        <div class="custom-check"></div>
-                    </div>
-                </div>
-
-                <!-- Remarks -->
-                <label class="remarks-label">Remarks (If Any)</label>
-                <input type="text" class="remarks-input" placeholder="">
-
-                <button class="submit-btn" onclick="submitFeedback()">Submit</button>
-                <div style="height: 50px;"></div> <!-- Spacer -->
-            </div>
+        <div class="dt-row">
+          <div class="date" id="dateText">Nov 20, 2025</div>
+          <div class="time" id="timeText">1:24 AM</div>
         </div>
-    </div>
 
-    <!-- MEAL HISTORY PAGE (Hidden by default) -->
-    <div class="sheet-history" id="sheetHistory">
-        <div class="history-page-header">
-            <button class="history-back-btn" onclick="closeHistory()">←</button>
-            <div class="history-title">Meal History</div>
+        <div class="approved">Meal Approved</div>
+
+        <div class="rate-wrap">
+          <button class="rate-btn">⭐  RATE US</button>
         </div>
-        <div class="history-page-content">
-            <!-- Blank content as per request/image -->
+
+      </div>
+
+      <div class="brown-box">
+        <div class="brown-inner">
+          <video src="video.mp4" autoplay muted playsinline style="
+              width:94%;
+              height:94%;
+              object-fit:contain;
+              display:block;
+              margin-left:14px;
+              margin-top:20px; 
+          "></video>
         </div>
-    </div>
+      </div>
 
-    <!-- DRAG LOGIC (MOUSE & TOUCH) -->
-    <script>
-        const topSheet = document.getElementById("sheetTop");
-        const handle = document.getElementById("dragHandle");
+    </article>
+  </div>
 
-        let startY = 0;
-        let currentY = 0;
-        let dragging = false;
+<script>
+/* Countdown 30 -> 1 */
+let sec = 30;
+const timerEl = document.getElementById("timerEl");
+timerEl.textContent = sec;
 
-        // Unified Events
-        function handleStart(y) {
-            startY = y;
-            dragging = true;
-            // Disable transition during drag
-            topSheet.style.transition = 'none';
-        }
+let t = setInterval(()=>{
+  sec--;
+  if(sec <= 1){
+    timerEl.textContent = 1;
+    clearInterval(t);
+  } else {
+    timerEl.textContent = sec;
+  }
+},1000); 
 
-        function handleMove(y) {
-            if (!dragging) return;
-            const delta = y - startY;
+/* Live date/time */
+function pad(n){return n<10?"0"+n:n;}
+function updateDT(){
+  const now=new Date();
+  const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const d=document.getElementById("dateText");
+  const tm=document.getElementById("timeText");
+  d.textContent=`${m[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
+  let h=now.getHours(), mm=pad(now.getMinutes()), ap=h>=12?"PM":"AM";
+  h=h%12||12;
+  tm.textContent=`${h}:${mm} ${ap}`;
+}
+updateDT();
+setInterval(updateDT,1000);
+function updateMeal() {
+  const now = new Date();
+  const hour = now.getHours();
+  let meal = "Dinner";
 
-            // Only allow dragging DOWN (positive delta)
-            if (delta < 0) {
-                currentY = 0;
-            } else {
-                currentY = delta;
-            }
+  if (hour < 11) meal = "BreakFast";
+  else if (hour < 16) meal = "Lunch";
 
-            topSheet.style.transform = `translateY(${currentY}px)`;
-        }
+  document.getElementById("mealTitle").textContent = meal;
+}
 
-        function handleEnd() {
-            if (!dragging) return;
-            dragging = false;
+updateMeal();
 
-            // Re-enable transition for smooth snap
-            topSheet.style.transition = 'transform 0.25s ease';
+</script>
 
-            // Threshold to dismiss: 25% of screen height
-            if (currentY > window.innerHeight / 4) {
-                dismissTicket();
-            } else {
-                restoreTicket();
-            }
-        }
-
-        // TOUCH Listeners
-        handle.addEventListener("touchstart", e => handleStart(e.touches[0].clientY));
-
-        // Use window for move/end to catch drags that go outside the handle
-        window.addEventListener("touchmove", e => {
-            if (dragging) {
-                e.preventDefault(); // Prevent scrolling while dragging
-                handleMove(e.touches[0].clientY);
-            }
-        });
-        window.addEventListener("touchend", () => handleEnd());
-
-        // MOUSE Listeners
-        handle.addEventListener("mousedown", e => handleStart(e.clientY));
-
-        window.addEventListener("mousemove", e => {
-            if (dragging) {
-                e.preventDefault(); // prevent selection
-                handleMove(e.clientY);
-            }
-        });
-        window.addEventListener("mouseup", () => handleEnd());
-
-        // Actions
-        function dismissTicket() {
-            // Slide Top Sheet DOWN (off screen)
-            topSheet.style.transform = `translateY(100vh)`; // 100vh pushes it fully down
-            currentY = window.innerHeight; // allow resuming if needed
-        }
-
-        function restoreTicket() {
-            // Slide Top Sheet UP (to original position)
-            topSheet.style.transform = `translateY(0)`;
-            currentY = 0;
-        }
-    </script>
-
-    <!-- CLOCK & MEAL LOGIC -->
-    <script>
-        /* Countdown 30 -> 1 */
-        let sec = 30;
-        const timerEl = document.getElementById("timerEl");
-        timerEl.textContent = sec;
-
-        let t = setInterval(() => {
-            sec--;
-            if (sec <= 1) {
-                timerEl.textContent = 1;
-                clearInterval(t);
-            } else {
-                timerEl.textContent = sec;
-            }
-        }, 1000);
-
-        /* Live date/time */
-        function pad(n) { return n < 10 ? "0" + n : n; }
-
-        function updateDT() {
-            const now = new Date();
-            const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-            const dEl = document.getElementById("dateText");
-            const tEl = document.getElementById("timeText");
-
-            dEl.textContent = `${m[now.getMonth()]} ${pad(now.getDate())}, ${now.getFullYear()}`;
-
-            let h = now.getHours();
-            let mm = pad(now.getMinutes());
-            let ap = h >= 12 ? "PM" : "AM";
-
-            h = h % 12 || 12; // 0 becomes 12
-            tEl.textContent = `${h}:${mm} ${ap}`;
-        }
-
-        updateDT();
-        setInterval(updateDT, 1000);
-
-        function updateMeal() {
-            const now = new Date();
-            const hour = now.getHours();
-            let meal = "Dinner";
-
-            if (hour < 11) meal = "BreakFast";
-            else if (hour < 16) meal = "Lunch";
-
-            document.getElementById("mealTitle").textContent = meal;
-        }
-
-        updateMeal();
-    </script>
-    <!-- FEEDBACK MODAL HTML -->
-    <script>
-        const sheetFeedback = document.getElementById('sheetFeedback');
-        const starsContainer = document.getElementById('starsContainer');
-        const stars = starsContainer.children;
-        const mealTabs = document.getElementById('mealTabs');
-
-        function openFeedback() {
-            // Slide Feedback Sheet UP
-            sheetFeedback.classList.add('active'); // active class handles visibility and transform
-            fbCurrentY = 0; // Reset drag state on open
-
-            // Auto-select removed as per request
-            // Previous logic for auto-selecting meal is deleted here.
-        }
-
-        function closeFeedback() {
-            // Slide Feedback Sheet DOWN
-            sheetFeedback.classList.remove('active'); // active class handles visibility and transform
-            // Handle manual transform reset if it was dragged
-            sheetFeedback.style.transform = ''; // Clear inline transform to let CSS class take over
-
-            fbCurrentY = window.innerHeight; // Match logic for consistency
-        }
-
-        // Star Logic
-        let currentRating = 0;
-        Array.from(stars).forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = parseInt(star.dataset.rating);
-                currentRating = rating;
-                updateStars(rating);
-            });
-        });
-
-        function updateStars(rating) {
-            Array.from(stars).forEach(s => {
-                if (parseInt(s.dataset.rating) <= rating) {
-                    s.classList.add('select-star');
-                    s.textContent = '★'; // Filled star
-                } else {
-                    s.classList.remove('select-star');
-                    s.textContent = '☆'; // Empty star
-                }
-            });
-        }
-
-        // Meal Tab Logic
-        function selectMealTab(selectedTab) {
-            Array.from(mealTabs.children).forEach(tab => tab.classList.remove('active-tab'));
-            selectedTab.classList.add('active-tab');
-        }
-
-        // Checkbox Logic
-        function toggleCheck(row) {
-            const check = row.querySelector('.custom-check');
-            check.classList.toggle('checked');
-        }
-
-        // Meal History Logic
-        const sheetHistory = document.getElementById('sheetHistory');
-
-        function openHistory() {
-            sheetHistory.classList.add('active');
-        }
-
-        function closeHistory() {
-            sheetHistory.classList.remove('active');
-        }
-
-        // Submit
-        function submitFeedback() {
-            // Collect data if needed, for now just close
-            // console.log("Feedback Submitted");
-            closeFeedback();
-            // Optional: reset stats
-            setTimeout(() => {
-                showCustomAlert("Feedback Submitted Successfully!");
-            }, 300);
-        }
-
-        // Custom Alert Logic
-        // Elements retrieved dynamically to avoid null reference if script runs before HTML
-        function getCustomAlertOverlay() { return document.getElementById('customAlertOverlay'); }
-        function getCustomAlertMsg() { return document.getElementById('customAlertMsg'); }
-
-        function showCustomAlert(msg) {
-            getCustomAlertMsg().textContent = msg;
-            getCustomAlertOverlay().classList.add('active');
-        }
-
-        function closeCustomAlert() {
-            getCustomAlertOverlay().classList.remove('active');
-        }
-
-        // Close on outside click is handled by drag/back button/done button. No overlay click needed.
-
-        /* ===== DRAG LOGIC FOR FEEDBACK SHEET (Matched to Sheet-Top) ===== */
-        const feedbackHandle = document.getElementById("feedbackDragHandle");
-
-        // Close button logic is now inline to match sheet-top and avoid event delegation issues
-
-        let fbStartY = 0;
-        let fbCurrentY = 0;
-        let fbDragging = false;
-
-        function handleFbStart(y) {
-            fbStartY = y;
-            fbDragging = true;
-            sheetFeedback.style.transition = 'none';
-        }
-
-        function handleFbMove(y) {
-            if (!fbDragging) return;
-            const delta = y - fbStartY;
-            // Only allow dragging DOWN (positive delta)
-            if (delta < 0) {
-                fbCurrentY = 0;
-            } else {
-                fbCurrentY = delta;
-            }
-            // Apply inline transform during drag
-            sheetFeedback.style.transform = `translateY(${fbCurrentY}px)`;
-        }
-
-        function handleFbEnd() {
-            if (!fbDragging) return;
-            fbDragging = false;
-            sheetFeedback.style.transition = 'transform 0.25s ease';
-
-            // Threshold: 25% of screen (Matched to sheet-top)
-            if (fbCurrentY > window.innerHeight / 4) {
-                closeFeedback();
-            } else {
-                // Restore
-                sheetFeedback.style.transform = ''; // remove inline to let .active class take over
-                fbCurrentY = 0;
-            }
-        }
-
-        // TOUCH Listeners for Feedback Header
-        feedbackHandle.addEventListener("touchstart", e => handleFbStart(e.touches[0].clientY));
-
-        window.addEventListener("touchmove", e => {
-            if (fbDragging) {
-                e.preventDefault(); // Prevent scrolling while dragging header
-                handleFbMove(e.touches[0].clientY);
-            }
-        }, { passive: false }); // Important for preventDefault
-
-        window.addEventListener("touchend", () => handleFbEnd());
-
-        // MOUSE Listeners for Feedback Header
-        feedbackHandle.addEventListener("mousedown", e => handleFbStart(e.clientY));
-
-        window.addEventListener("mousemove", e => {
-            if (fbDragging) {
-                e.preventDefault();
-                handleFbMove(e.clientY);
-            }
-        });
-        window.addEventListener("mouseup", () => handleFbEnd());
-    </script>
-
-    <!-- CUSTOM ALERT HTML -->
-    <div class="custom-alert-overlay" id="customAlertOverlay">
-        <div class="custom-alert-box">
-            <div class="custom-alert-title">Message</div>
-            <div class="custom-alert-msg" id="customAlertMsg"></div>
-            <button class="custom-alert-btn" id="customAlertBtn" onclick="closeCustomAlert()">OK</button>
-        </div>
-    </div>
 </body>
-
-
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
