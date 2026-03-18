@@ -17,8 +17,8 @@
   *{box-sizing:border-box}
   body{
     margin:0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background:#f3f3f0;   /* ✅ fixed */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; /* ✅ FIXED */
+    background:#f3f3f0;  /* ✅ FIXED */
     color:var(--text);
   }
 
@@ -34,32 +34,34 @@
     top:0;
     z-index:30;
   }
-
   .topbar .handle{
     width:44px;height:6px;border-radius:4px;background:#d6d6d6;
     position:absolute;top:12px;left:50%;transform:translateX(-50%);
   }
+  .topbar span{font-size:17px;font-weight:400}
 
   .close-btn{
     position:absolute;
     right:12px;
-    top:32px;
+    top:50%;
+    transform:translateY(-50%);
     background:transparent;
     border:none;
-    font-size:16px;
-    color:#f0f0f0;
-    font-weight:600;
-    cursor:pointer;
+    color:#ffffff;
+    font-size:22px;
+    font-weight:400;
+    padding:4px 6px;
   }
 
   .wrap{display:flex;justify-content:center;padding:18px 8px 40px;}
-
   .card{
     width:97%;
     max-width:var(--card-max);
     background:#f2f2f2;
     border-radius:var(--card-radius);
-    box-shadow:0 3px 8px rgba(0,0,0,0.6), 0 8px 18px rgba(0,0,0,0.12);
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.6),
+        0 8px 18px rgba(0,0,0,0.12);
     position:relative;
   }
 
@@ -69,24 +71,28 @@
     right:-10px;
     min-width:45px;
     height:40px;
+    padding:0 10px;
     border-radius:18px;
     background:#999;
     display:flex;align-items:center;justify-content:center;
-    font-size:18px;
+    font-size:18px;font-weight:400;
+    text-shadow:0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow:0 8px 18px rgba(0,0,0,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
   }
 
-  .content{padding:18px;}
+  .content{padding:18px 18px;}
 
   .profile-row{
     display:flex;
     gap:24px;
     align-items:center;
-    margin-top:10px;
+    margin-top:12px;
   }
 
   .avatar{
     width:145px;
     height:148px;
+    border-radius:0;
     overflow:hidden;
     box-shadow:0 12px 26px rgba(0,0,0,0.18);
   }
@@ -95,7 +101,7 @@
     width:100%;
     height:100%;
     object-fit:cover;
-    object-position:center 10%;
+    object-position: center 10%;
   }
 
   .qr-box{
@@ -106,49 +112,38 @@
     display:flex;
     align-items:center;
     justify-content:center;
+    margin-top:6px;
     overflow:hidden;
     box-shadow:0 12px 26px rgba(0,0,0,0.18);
   }
 
-  .qr-img{
-    width:105%;
-    height:105%;
-    object-fit:cover;
-  }
-
-  .left-col, .right-col{
-    width:145px;
-    text-align:center;
-  }
-
-  .left-col{ margin-top:8px; }
-  .right-col{ margin-top:2px; }
-
   .meal-title{
-    font-size:15px;
+    font-size:16px;
     font-weight:500;
+    margin-bottom:6px;
   }
 
-  .sid, .line{
+  .sid, .line {
     font-size:14px;
     font-weight:500;
-    margin-bottom:10px;
+    margin-bottom:12px;
+    line-height:0.9;
   }
 
   .course{
-    font-size:15px;
-    font-weight:400;   /* ✅ fixed */
-    margin-top:20px;
-    margin-bottom:35px;
+    font-size:16px;
+    font-weight:500;
+    margin-top:22px;
+    margin-bottom:48px;
     text-align:center;
     letter-spacing:0.1px;
   }
 
   .assigned-mess{
-    font-size:15px;
+    font-size:16px;
     font-weight:500;
     margin-top:-18px;
-    margin-bottom:40px;
+    margin-bottom:42px;
     text-align:center;
     letter-spacing:0.1px;
   }
@@ -156,19 +151,16 @@
   .dt-row{
     display:flex;
     justify-content:space-between;
-    margin-bottom:35px;
+    margin-top:32px;
+    margin-bottom:38px;
     padding:0 64px;
-  }
-
-  .dt-row div{
-    font-size:18px;
-    font-weight:400;
+    margin-left:-58px;
   }
 
   .approved{
     text-align:center;
-    font-size:22px;
-    font-weight:600;
+    font-size:24px;
+    font-weight:700;
     color:#5dc71c;
   }
 
@@ -178,9 +170,9 @@
     border-radius:10px;
     border:2px solid var(--brown);
     background:#f3f3f0;
-    font-size:15px;
+    font-size:16px;
     font-weight:600;
-    padding:5px 8px;
+    padding:4px 6px;
   }
 
   .brown-box{
@@ -203,6 +195,20 @@
     width:94%;
     height:94%;
     object-fit:contain;
+  }
+
+  .left-col, .right-col{
+    width:145px;
+    text-align:center;
+  }
+
+  .left-col{ margin-top:10px; }
+  .right-col{ margin-top:3px; }
+
+  .qr-img{
+    width:105%;
+    height:105%;
+    object-fit:cover;
   }
 
 </style>
